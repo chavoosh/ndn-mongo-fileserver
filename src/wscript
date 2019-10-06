@@ -1,0 +1,20 @@
+# -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
+def build(bld):
+    bld.objects(
+        target='mongo-fileserver-objects',
+        source=bld.path.ant_glob('mongo-fileserver/*.cpp', excl='mongo-fileserver/main.cpp'),
+        use=['core-objects', 'MONGOCXX'])
+
+    bld.program(
+        target='../../bin/ndn-mongo-fileserver',
+        name='ndn-mongo-fileserver',
+        source='mongo-fileserver/main.cpp',
+        use='mongo-fileserver-objects')
+
+    # List all .cpp files (whole example in one .cpp)
+    for ex in bld.path.ant_glob('util/*.cpp'):
+        name = ex.change_ext('').path_from(bld.path.get_bld())
+        bld.program(name='%s' % name,
+                    target='../../bin/%s' % name,
+                    source=[ex],
+                    use=['core-objects', 'MONGOCXX'])

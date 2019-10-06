@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Executable
+/bin/
+
+# Waf build system
+/build/
+.waf3-*-*/
+.lock-waf*
+
+# Compiled python code
+__pycache__/
+*.py[cod]
