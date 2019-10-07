@@ -22,6 +22,25 @@ in the source directory:
       ./waf
       sudo ./waf install
 
+### Quick test
+To make sure the tool-bundle is installed properly here is a quick test:
+
+1. Run MongoDB service:
+
+       sudo systemctl start mongod.service
+
+2. Chunk a content and populate the DB (the following command breaks down the input file into
+1kB chunks with version 1 where each chunk's name looks like: `/ndn/test/README.md/%FD%01/<segment-number>`)
+
+       chunker /ndn/test -i ~/ndn-mongo-fileserver/README.md -s 1000 -e 1
+
+3. Run NFD and then run fileserver to serve the available contents in the DB (the following command lets the fileserver to answer
+all Interests whose name start with `/ndn/test`):
+
+        ndn-mongo-fileserver /ndn/test
+
+If no error occurred during any step you can safely quite the fileserver.
+
 # Reporting Bugs
 To report any bugs or features use the project's [issue tracker](https://github.com/chavoosh/ndn-mongo-fileserver/issues).
 
