@@ -10,8 +10,8 @@ Take the following steps to install this tool-bundle.
 
 ### Prerequisites
 Install the mentioned version of the following packages:
-- [ndn-cxx](https://github.com/named-data/ndn-cxx) (release 0.6.6)
-- [NFD](https://github.com/named-data/NFD) (release 0.6.6)
+- [ndn-cxx](https://github.com/named-data/ndn-cxx) (release `0.6.6`)
+- [NFD](https://github.com/named-data/NFD) (release `0.6.6`)
 - [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu)
 
 ### Build Steps
