@@ -23,7 +23,7 @@ in the source directory:
       sudo ./waf install
 
 # Reporting Bugs
-To report any bugs or features use the project's issue tracker.
+To report any bugs or features use the project's [issue tracker](https://github.com/chavoosh/ndn-mongo-fileserver/issues).
 
 # License
 ndn-mongo-fileserver is an open source project licensed under the GPL version 3. See [COPYING.md](COPYING.md)
