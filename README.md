@@ -2,7 +2,7 @@
 
 NDN-MONGO-FILESERVER tool-bundle is part of [iViSA project](https://ivisa.named-data.net) which includes the following tools:
 1. [ndn-mongo-fileserver](src/mongo-fileserver)
-2. [chunker] (src/util)
+2. [chunker](src/util)
 3. [stats-collector](src/util)
 
 ## INSTALL
