@@ -41,6 +41,9 @@ all Interests whose name start with `/ndn/test`):
 
 If no error occurred during any step you can safely quite the fileserver.
 
+# Frontend
+To learn how to watch the published videos in modern browsers visit [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend).
+
 # Reporting Bugs
 To report any bugs or features use the project's [issue tracker](https://github.com/chavoosh/ndn-mongo-fileserver/issues).
 
