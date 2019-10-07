@@ -18,10 +18,7 @@ Install the mentioned version of the following packages:
 To configure, compile, and install this tool-bundle, type the following commands
 in the source directory:
 
-      CXXFLAGS="-I/usr/local/include/mongocxx/v_noabi \
-                -I/usr/local/include/bsoncxx/v_noabi" \
-                LINKFLAGS="-L/usr/local/lib -lmongocxx \
-                -lbsoncxx" ./waf configure
+      ./waf configure
       ./waf
       sudo ./waf install
 
