@@ -1,0 +1,13 @@
+# copy this file to /etc/logrotate.d directory
+
+~/.chunks-log/segment-stats.log {
+        daily
+        minsize 20M
+        su root adm
+        missingok
+        create
+        rotate 1000000
+        compress
+        delaycompress
+        notifempty
+}
