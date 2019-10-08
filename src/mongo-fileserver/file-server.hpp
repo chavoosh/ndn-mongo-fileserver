@@ -102,10 +102,20 @@ private:
   onRegisterFailed(const Name& prefix, const std::string& reason);
 
   /**
-   * @brief Get the latest version from mongodb
+   * @brief Resolve the latest verioned nameprefix for @p name from mongodb
+   *
+   * @note The resolved versioned name contains nameprefix of the first found
+   *       content according to @p name.
+   *       E.g., assuming in there is one content
+   *       in the DB, named `/ndn/test/readme.md`. Then the resolved versioned
+   *       name for Interests with either of the following names:
+   *          `/ndn`
+   *          `/ndn/test`
+   *          `/ndn/test/readme.md`
+   *       will be translated into `/ndn/test/readme.md/<version>`.
    */
-  uint64_t
-  resolveVersion(Name name);
+  Name
+  resolveVersionedName(Name name);
 
 public:
   // static variable member

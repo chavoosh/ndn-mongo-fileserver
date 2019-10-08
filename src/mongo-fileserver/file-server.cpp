@@ -40,6 +40,7 @@ const std::string SERVER_STATS_PATH = std::string(ROOT_DIR)
 const std::string	DATABASE_NAME = "chunksDB";
 const std::string	COLLECTION_NAME = "chunksCollection";
 
+using bsoncxx::stdx::string_view;
 using bsoncxx::builder::stream::close_array;
 using bsoncxx::builder::stream::close_document;
 using bsoncxx::builder::stream::document;
@@ -135,13 +136,14 @@ FileServer::processDiscoveryInterest(const Interest& interest)
   }
 
   // first we need to know the version of the solicited content
-  uint64_t cversion = m_version;
-  if (cversion == 0) {
-    cversion = resolveVersion(interest.getName().getPrefix(-1));
-    if (cversion == 0)
+  Name versionedName;
+  if (m_version > 0)
+    versionedName = Name(interest.getName().getPrefix(-1)).appendVersion(m_version);
+  else {
+    versionedName = resolveVersionedName(interest.getName().getPrefix(-1));
+    if (versionedName.size() == 0)
       return;
   }
-  Name versionedName = Name(interest.getName().getPrefix(-1)).appendVersion(cversion);
 
   MetadataObject mobject;
   mobject.setVersionedName(versionedName);
@@ -170,21 +172,20 @@ FileServer::processSegmentInterest(const Interest& interest)
 
   if (m_options.isVerbose) {
     std::cerr << "Interest: " << interest << std::endl;
-    std::cerr << "canBePrefix is " << (interest.getCanBePrefix() ? "true" : "false") << std::endl;
   }
 
-  // first we need to know the version of the solicited content
-  uint64_t cversion = m_version;
+  // first we need to know the versioned name of the solicited content
   if (!name[-1].isSegment()) {
     if (name[-1].isVersion())
       name.appendSegment(0);
     else {
-      if (cversion == 0) {
-        cversion = resolveVersion(name);
-        if (cversion == 0)
+      if (m_version > 0)
+        name = Name(name).appendVersion(m_version);
+      else {
+        name = resolveVersionedName(interest.getName().getPrefix(-1));
+        if (name.size() == 0)
           return;
       }
-      name.appendVersion(cversion);
       name.appendSegment(0);
     }
   }
@@ -233,21 +234,35 @@ FileServer::processSegmentInterest(const Interest& interest)
   m_face.put(data);
 }
 
-uint64_t
-FileServer::resolveVersion(Name name)
+Name
+FileServer::resolveVersionedName(Name name)
 {
   uint64_t version = 0; // ZERO is considered as invalid version
+  Name versionedNameprefix("");
 
   auto result = m_collection.find_one(document{} << "prefix" << name.toUri() << finalize);
-  if(result) { // version document exists
+  if (result) { // is this version doc or reference doc?
+    if ((std::string)result->view()["type"].get_utf8().value == "ref") {
+      result = m_collection.find_one(document{}
+                   << "_id"
+                   << bsoncxx::oid{(std::string)result->view()["ref_id"].get_utf8().value}
+                   << finalize);
+    }
+    // version document exists
     bsoncxx::array::view subarray{result->view()["versions"].get_array().value};
-    for (const bsoncxx::array::element& sub_ele : subarray)
+    for (const bsoncxx::array::element& sub_ele : subarray) {
       version = (uint64_t)sub_ele.get_int64().value;
+    }
   }
-  else {
+
+  if (version == 0) {
     std::cerr << "No version is available for " << name.toUri() << " (No VERSION DOC exists)\n";
   }
-  return version;
+  else {
+    versionedNameprefix = Name((std::string)result->view()["prefix"].get_utf8().value);
+    versionedNameprefix.appendVersion(version);
+  }
+  return versionedNameprefix;
 }
 
 void
