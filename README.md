@@ -49,7 +49,7 @@ To learn how to watch the published videos in modern browsers visit [ndn-video-f
 After setting up the NDN fileserver you might want to serve your videos via NDN testbed. To do this, take the following steps:
 1. [Get a valid certificate](https://ndncert.named-data.net/help) from NDN testbed and set it up on your server. Assume your certificate name is `/ndn/my/cert`.
 
-2. Encode, package, and chunk your video(s). To do this, first update `base` in [`driver.sh`](scripts/video/driver.sh) file to your cert (e.g., `/ndn/my/cert/video`), and then run the following command:
+2. Encode, package, and chunk your video(s). To do this, first update `base` in [`driver.sh`](scripts/video/driver.sh#L113) file to your cert (e.g., `/ndn/my/cert/video`), and then run the following command:
     
        (cd ~/ndn-mongo-fileserver/scripts/video && bash driver.sh <absolute-address-of-your-video>)
 
