@@ -63,7 +63,7 @@ After setting up the NDN fileserver you might want to serve your videos via NDN 
  
 4. Set up a webserver and use [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend) as your website resources with the following modifications:
 
-    - Update `BASEPREFIX` in [`app.js`](https://github.com/chavoosh/ndn-video-frontend/blob/master/app.js) to your cert name (e.g., `/ndn/my/cert`).
+    - Update `BASEPREFIX` in [`app.js`](https://github.com/chavoosh/ndn-video-frontend/blob/master/app.js#L7) to your cert name (e.g., `/ndn/my/cert`).
 
     - Then simply copy the generated HTML file (from **step 2**) under your webserver directory (e.g., `/var/www/html/my-website`) and add a link to this HTML file in index.html (look at [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend) to see a template).
 
