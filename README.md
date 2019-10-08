@@ -53,13 +53,13 @@ After setting up the NDN fileserver you might want to serve your videos via NDN 
     
        (cd ~/ndn-mongo-fileserver/scripts/video && bash driver.sh <absolute-address-of-your-video>)
 
-This command populates the MongoDB with video chunks and at the end generate an HTML page for the video that will be used in **step 4**.
+    This command populates the MongoDB with video chunks and at the end generate an HTML page for the video that will be used in **step 4**.
 
 3. Connect the NFD on your server to [one of the testbed hubs](http://ndndemo.arl.wustl.edu) (you might want to choose the closest hub to your server). To do this you can run the following command:
 
         bash ~/ndn-mongo-fileserver/scripts/main/run.sh /ndn/my/cert udp hobo.cs.arizona.edu with-stats
  
-This command connects the the NFD instance on your server to `hobo.cs.arizona.edu` hub via UDP tunnel and collects the statistical information of the video streaming service whenever anyone watches your videos. You can find the stats under `~/.chunks-log` directory.
+    This command connects the the NFD instance on your server to `hobo.cs.arizona.edu` hub via UDP tunnel and collects the statistical information of the video streaming service whenever anyone watches your videos. You can find the stats under `~/.chunks-log` directory.
  
 4. Set up a webserver and use [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend) as your website resources with the following modifications:
 
