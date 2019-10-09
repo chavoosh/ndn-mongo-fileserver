@@ -16,6 +16,12 @@ prefix_size = 4
 ignore_buf_dur = True
 log_file=""
 
+if len(sys.argv) == 1:
+    print "program usage:\n\tpython parser.py <log-file>\n",\
+          "\t-s: size of fixed prefix\n",\
+          "\t-b: print buffering duration (if any exists)\n"
+    sys.exit(2)
+
 try:
     opts, args = getopt.getopt(sys.argv[2:], "s:b")
 except getopt.GetoptError:
@@ -29,11 +35,6 @@ for opt, arg in opts:
     elif opt == '-b':
         ignore_buf_dur = False
 
-if len(sys.argv) == 1:
-    print "program usage:\n\tpython parser.py -i <log-file>\n",\
-          "\t-s: size of fixed prefix\n",\
-          "\t-b: print buffering duration (if any exists)\n"
-    sys.exit(2)
 log_file = sys.argv[1]
 
 try:
