@@ -107,7 +107,7 @@ bash ./packager.sh . $filename $filename/$protocol $protocol && wait
 version=1
 segmentSize=8000
 
-chunker /ndn/web/video/$filename -i $current_dir/$filename/$protocol -s $segmentSize -e $version && wait
+chunker /ndn/web/video/$filename -i $current_dir/$filename -s $segmentSize -e $version && wait
 
 # html file options
 base='/ndn/web/video'
@@ -115,7 +115,7 @@ manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
 fallbackUrl='/video/'$filename'/'$protocol'/'playlist.m3u8
 
 # cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/53f92bc78632f7047c8227bba5630a111f4d3976/base.html
+input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/5baea866de604b8e91cae2e6aaa61e7a7bb8971e/base.html
 
 MULTISPACES='      '
 line="${MULTISPACES}"'<!-- manifest uri -->\n'
