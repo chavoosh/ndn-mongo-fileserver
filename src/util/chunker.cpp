@@ -234,6 +234,7 @@ public:
 
         if (nCharsRead > 0) {
           auto data = make_shared<Data>(Name(versionedPrefix).appendSegment(m_store.size()));
+          data->setFreshnessPeriod(10_s);
           data->setContent(buffer.data(), static_cast<size_t>(nCharsRead));
           m_store.push_back(data);
         }

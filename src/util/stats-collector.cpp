@@ -115,6 +115,26 @@ private:
     if (segmentFetchDelayVector.size() >= MAX_VECTOR_SIZE) {
       printStats();
     }
+
+    // Create Data name based on Interest's name
+    Name dataName(interest.getName());
+    dataName.appendVersion(0);
+    dataName.appendSegment(0);
+    static const std::string content = "REPLY TO STAT REPORT";
+
+    // Create a dumb Data packet
+    shared_ptr<Data> data = make_shared<Data>();
+    data->setName(dataName);
+    data->setFreshnessPeriod(10_s); // 10 seconds
+    data->setContent(reinterpret_cast<const uint8_t*>(content.data()), content.size());
+    data->setFinalBlock(name::Component::fromSegment(0));
+
+    // Sign Data packet with default identity
+    m_keyChain.sign(*data);
+
+    // Return Data packet to the requester
+    std::cout << ">> D: " << *data << std::endl;
+    m_face.put(*data);
   }
 
   void
@@ -130,6 +150,7 @@ private:
   Name m_prefix;
   Face m_face;
   bool m_verbose;
+  KeyChain m_keyChain;
 };
 
 } // namespace collector
