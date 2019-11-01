@@ -63,13 +63,26 @@ public:
   : m_verbose(isVerbose)
   {
     // chech the input path
-    m_inputPath = Name(path).toUri(); // to prune all extra slashes
+    m_inputPath = path;
+    int found = m_inputPath.find("//");
+    while (found != -1) {
+      m_inputPath.replace(found, 2, "/");
+      found = m_inputPath.find("//");
+    }
+    if (m_inputPath[m_inputPath.length() - 1] == '/')
+      m_inputPath = m_inputPath.substr(0, m_inputPath.length() - 1);
+
     // determine the root path
     boost::filesystem::path p(m_inputPath);
     try {
       if (checkExistance(m_inputPath)) {
-        if (is_regular_file(p))
-          m_root = Name(m_inputPath).getPrefix(-1).toUri();
+        if (is_regular_file(boost::filesystem::status(p))) {
+          int pos = m_inputPath.find_last_of("/");
+          if (pos == -1)
+            m_root = "";
+          else
+            m_root = m_inputPath.substr(0, pos);
+        }
         else if (is_directory(p))
           m_root = m_inputPath;
         else {
@@ -78,7 +91,7 @@ public:
         }
       }
       else
-        return;
+        std::runtime_error(path + " does not exist.\n");
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
@@ -110,7 +123,7 @@ public:
   }
 
   void
-  run ()
+  run()
   {
     scan(m_inputPath);
   }
@@ -135,19 +148,17 @@ public:
           if (populateStore(address) != 0)
             return;
         }
-        else if (is_directory(p)) {
+        else {
           for(auto& entry :
               boost::make_iterator_range(boost::filesystem::directory_iterator(p), {})) {
             scan(entry.path().string());
           }
         }
-        else {
-          std::cout << p << " is neither a regular file nor a directory\n";
-          return;
-        }
       }
-      else
+      else {
+        std::runtime_error(address + " does not exist.\n");
         return;
+      }
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
@@ -161,20 +172,15 @@ public:
   {
     boost::filesystem::path p(path);
     try {
-      if (exists(p)) {
-        //std::cout << path << " exists\n";
+      if (exists(p))
         return true;
-      }
-      else {
-        std::cout << path << " doest not exist\n";
+      else
         return false;
-      }
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
       std::cout << ex.what() << std::endl;
     }
-    std::cout << path << " doest not exists\n";
     return false;
   }
 
@@ -223,7 +229,6 @@ public:
     std::string prefix = fpath;
     prefix.erase(0, m_root.size()).insert(0, m_prefix.toUri());
     Name versionedPrefix = Name(prefix).appendVersion(m_versionedPrefix[-1].toVersion());
-
     std::vector<uint8_t> buffer(m_segmentSize);
     std::filebuf fb;
     if (fb.open (fpath, std::ios::in)) {
