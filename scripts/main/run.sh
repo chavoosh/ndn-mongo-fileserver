@@ -32,7 +32,7 @@ then
 	echo -e '\tfirst arg  :    nameprefix of videos and stats (e.g., /ndn/web)'
 	echo -e '\tsecond arg :    transport protocol to connect to the hub (i.e., <tcp> or <udp>)'
 	echo -e '\tthird arg  :    address of the hub to connect to (e.g., hobo.cs.arizona.edu)'
-	echo -e '\tfourth arg :    run stats-collector or not (i.e., <with-stats> or <no-stats>'
+  echo -e '\tfourth arg :    enable running stats-collector by passing <with-stats> (default is disable)'
 	echo -e '\tfifth arg  :    serve a specific version of all videos [optional]'
 elif { [ "$2" == "tcp" ] || [ "$2" == "udp" ]; }
 then
@@ -79,6 +79,6 @@ else
   echo -e '\tfirst arg  :    nameprefix of videos and stats (e.g., /ndn/web)'
   echo -e '\tsecond arg :    transport protocol to connect to the hub (i.e., <tcp> or <udp>)'
   echo -e '\tthird arg  :    address of the hub to connect to (e.g., hobo.cs.arizona.edu)'
-  echo -e '\tfourth arg :    run stats-collector or not (i.e., <with-stats> or <no-stats>'
+  echo -e '\tfourth arg :    enable running stats-collector by passing <with-stats> (default is disable)'
   echo -e '\tfifth arg  :    serve a specific version of all videos [optional]'
 fi
