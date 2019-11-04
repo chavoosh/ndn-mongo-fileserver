@@ -115,7 +115,7 @@ manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
 fallbackUrl='/video/'$filename'/'$protocol'/'playlist.m3u8
 
 # cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/f07b90602810f245f8877516b9f8e0b29fbde807/base.html
+input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/2c26e839e9617c4efa1b39fb24bc50d2acc7e6e9/base.html
 
 MULTISPACES='      '
 line="${MULTISPACES}"'<!-- manifest uri -->\n'
