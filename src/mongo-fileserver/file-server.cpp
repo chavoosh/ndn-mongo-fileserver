@@ -140,7 +140,7 @@ FileServer::processDiscoveryInterest(const Interest& interest)
   if (m_version > 0)
     versionedName = Name(interest.getName().getPrefix(-1)).appendVersion(m_version);
   else {
-    versionedName = resolveVersionedName(interest.getName().getPrefix(-1));
+    versionedName = resolveVersionedName(interest.getName());
     if (versionedName.size() == 0)
       return;
   }
@@ -182,7 +182,7 @@ FileServer::processSegmentInterest(const Interest& interest)
       if (m_version > 0)
         name = Name(name).appendVersion(m_version);
       else {
-        name = resolveVersionedName(interest.getName().getPrefix(-1));
+        name = resolveVersionedName(interest.getName());
         if (name.size() == 0)
           return;
       }
