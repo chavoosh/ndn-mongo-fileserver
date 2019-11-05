@@ -133,7 +133,9 @@ private:
     m_keyChain.sign(*data);
 
     // Return Data packet to the requester
-    std::cout << ">> D: " << *data << std::endl;
+    if (m_verbose)
+      std::cerr << "Dummy Stats D: " << *data << std::endl;
+
     m_face.put(*data);
   }
 
