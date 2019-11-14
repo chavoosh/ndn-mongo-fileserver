@@ -94,6 +94,7 @@ filename=$(basename -- "$1")
 filename="${filename%.*}"
 current_dir="$(pwd)"
 
+base='/ndn/web/video'
 ################################################
 # transcoding (adjust the resolution in script)
 bash ./transcoder.sh $1 && wait
@@ -107,22 +108,17 @@ bash ./packager.sh . $filename $filename/$protocol $protocol && wait
 version=1
 segmentSize=8000
 
-chunker /ndn/web/video/$filename -i $current_dir/$filename -s $segmentSize -e $version && wait
+chunker $base/$filename -i $current_dir/$filename -s $segmentSize -e $version && wait
 
 # html file options
-base='/ndn/web/video'
 manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
-fallbackUrl='/video/'$filename'/'$protocol'/'playlist.m3u8
 
 # cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/2c26e839e9617c4efa1b39fb24bc50d2acc7e6e9/base.html
+input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/919421d370175e857e5c4649cae1c389e437b0ba/base.html
 
 MULTISPACES='      '
 line="${MULTISPACES}"'<!-- manifest uri -->\n'
 line+="${MULTISPACES}"'<span id="manifestUri" hidden>'$manifestUrl'</span>\n\n'
-line+="${MULTISPACES}"'<!-- fallback url -->\n'
-line+="${MULTISPACES}"'<span id="videoUrl" hidden>'$fallbackUrl'</span>\n'
-
 
 curl $input | sed -n '0, /begin url section/p' > $filename.html && printf "${line}" >> $filename.html
 curl $input | sed -n '/end url section/, $p' >> $filename.html
