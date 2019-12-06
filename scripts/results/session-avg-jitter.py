@@ -14,8 +14,7 @@
 # that runs the stats-collector tool.
 #
 # The output is a plot, showing the average jitter during *each*
-# session. A session can be a good representative of one video
-# file.
+# session. A session can be a good representative of one video playback.
 #.....................................................................
 
 import subprocess

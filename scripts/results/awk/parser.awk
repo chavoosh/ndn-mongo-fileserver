@@ -24,12 +24,12 @@
 # $6 : [space]
 # $7 : [ndn]
 # $8 : [web]
-# $9: [stats]
+# $9:  [stats]
 # $10: [video]
 # $11: video name
-# $12: media type (e.g., audio, h264_720p, etc.) || file name
+# $12: media type (e.g., audio, h264_720p, etc.) OR file name
 #      (If this is file name the rest of fields number
-#       will shift back by one. Meaning $13: status, $14: hub, etc.)
+#       will shift back by ONE. Meaning $13: status, $14: hub, etc.)
 # $13: file name
 # $14: status
 # $15: hub

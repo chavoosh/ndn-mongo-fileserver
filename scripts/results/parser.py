@@ -5,6 +5,32 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this script e.g., in COPYING.md file. If not, see <http://www.gnu.org/licenses/>.
+#
+# DESCRIPTION:
+# ------------
+# This script parses the log file collected by stats-collector tool
+# and print each line of the log file in a specific format. Look at
+# the structure of each printed line, below:
+#
+# OUTPUT STRUCTURE
+# --------------
+# $1 : Date & Time
+# $2 : File name
+# $3 : Status (=[DONE] OR [FAIL])
+# $4 : Hub
+# $5 : Client IP address
+# $6 : Estimated Bandwidth - in kbps
+# $7 : Number of Retransmissions
+# $8 : Number of Timeouts
+# $9 : Number of Nacks
+# $10: Number of chunks of the file
+# $11: Delay to download this file (file retrieval delay) - in second
+# $12: Average round-trip time - in millisecond
+# $13: Average jitter - in millisecond
+# $14: Session ID
+# $15: Startup delay
+# $16: Number of rebufferings
+# $REST: Length of each rebuffering
 #.....................................................................
 
 import os

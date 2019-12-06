@@ -12,8 +12,8 @@
 # on the server side. You can find this file on the machine
 # that runs the stats-collector tool.
 #
-# The output is a plot, showing the number of rebuffering during
-# playing back a video (i.e, each session).
+# The output is a plot, showing the number of rebufferings during *each*
+# video playing back (i.e, each session).
 #.....................................................................
 
 import subprocess
