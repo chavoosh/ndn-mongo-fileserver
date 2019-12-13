@@ -40,6 +40,7 @@ namespace chunker {
 
 const std::string	DATABASE_NAME = "chunksDB";
 const std::string	COLLECTION_NAME = "chunksCollection";
+uint32_t FRESHNESS_PERIOD = 10;
 
 using bsoncxx::builder::stream::close_array;
 using bsoncxx::builder::stream::close_document;
@@ -239,7 +240,7 @@ public:
 
         if (nCharsRead > 0) {
           auto data = make_shared<Data>(Name(versionedPrefix).appendSegment(m_store.size()));
-          data->setFreshnessPeriod(10_s);
+          data->setFreshnessPeriod(time::seconds(ndn::chunker::FRESHNESS_PERIOD)); // default: 10s
           data->setContent(buffer.data(), static_cast<size_t>(nCharsRead));
           m_store.push_back(data);
         }
@@ -426,6 +427,8 @@ main (int argc, char** argv)
                        "file or directory path to chunk")
     ("segment-size,s", po::value<size_t>(&segmentSize),
                        "maximum segment size, in bytes")
+    ("freshness-period,f", po::value<uint32_t>(&ndn::chunker::FRESHNESS_PERIOD),
+                       "freshness period of Data packets in seconds")
     ("version-no,e",   po::value<uint64_t>(&version),
                        "version under which all files will be published")
     ("verbose,v",      po::bool_switch(&verbose),
@@ -474,6 +477,7 @@ main (int argc, char** argv)
   std::cout << "run summary: \n"
             << "\tpath: " << path << "\n"
             << "\tprefix: " << prefix << "\n"
+            << "\tfreshness-period: " << ndn::chunker::FRESHNESS_PERIOD << "\n"
             << "\tsegment-size: " << segmentSize << "\n"
             << "\tversion: " << version << std::endl;
 
