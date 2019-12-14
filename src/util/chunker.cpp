@@ -82,7 +82,7 @@ public:
           if (pos == -1)
             m_root = "";
           else
-            m_root = m_inputPath.substr(0, pos);
+            m_root = m_inputPath.substr(0, pos + 1);
         }
         else if (is_directory(p))
           m_root = m_inputPath;
@@ -107,9 +107,15 @@ public:
     }
     m_segmentSize = segmentSize;
 
-    m_prefix = Name(prefix);
+    // check input NDN prefix (no tailing slash)
+    std::string tempPrefix = prefix;
+    while (tempPrefix.length() > 1 && tempPrefix[tempPrefix.length() - 1] == '/') {
+      tempPrefix = tempPrefix.substr(0, tempPrefix.length() - 1);
+    }
+
+    m_prefix = Name(tempPrefix);
     if (version != 0) {
-      m_versionedPrefix = Name(prefix).appendVersion(version);
+      m_versionedPrefix = Name(tempPrefix).appendVersion(version);
       m_version = version;
     }
     else {
@@ -228,7 +234,9 @@ public:
     }
 
     std::string prefix = fpath;
-    prefix.erase(0, m_root.size()).insert(0, m_prefix.toUri());
+    prefix.erase(0, m_root.size()).insert(0, "/").insert(0, m_prefix.toUri());
+    std::cout << "xxxxx: " << prefix;
+    return 1;
     Name versionedPrefix = Name(prefix).appendVersion(m_versionedPrefix[-1].toVersion());
     std::vector<uint8_t> buffer(m_segmentSize);
     std::filebuf fb;
