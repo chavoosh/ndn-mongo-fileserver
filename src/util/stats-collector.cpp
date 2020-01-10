@@ -92,8 +92,8 @@ public:
 
     for (auto& element : segmentFetchDelayVector)
     {
-      ndn::collector::FOUT << t.substr(0, t.length()-1) << "  "
-                           << std::get<1>(element).toUri() << "\n";
+      FOUT << t.substr(0, t.length()-1) << "  "
+           << std::get<1>(element).toUri() << "\n";
     }
     segmentFetchDelayVector.clear();
     FOUT.close();

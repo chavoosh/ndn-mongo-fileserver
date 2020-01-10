@@ -52,7 +52,7 @@ using bsoncxx::builder::basic::make_document;
 using bsoncxx::builder::stream::document;
 using bsoncxx::builder::basic::make_array;
 
-std::ofstream FOUT(SERVER_STATS_PATH, std::ios_base::app);
+std::ofstream FOUT;
 
 void
 FileServer::printStats()
@@ -63,6 +63,7 @@ FileServer::printStats()
   std::time_t end_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
   std::string t(ctime(&end_time));
 
+  FOUT.open(SERVER_STATS_PATH, std::ios_base::app);
   FOUT << t.substr(0, t.length()-1) << " nData: " << stats.nData << "\n\n";
   FOUT.close();
 }
@@ -220,10 +221,12 @@ FileServer::processSegmentInterest(const Interest& interest)
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);
     std::string t(ctime(&end_time));
 
+    FOUT.open(SERVER_STATS_PATH, std::ios_base::app);
     FOUT << t.substr(0, t.length()-1)
          << " Elapsed time of "
          << interest.getName().toUri()
          << ": " << elapsed_seconds.count() << "\n";
+    FOUT.close();
 
     std::cerr << t.substr(0, t.length()-1)
               << " Elapsed time of "
