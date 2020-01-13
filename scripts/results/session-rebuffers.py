@@ -24,7 +24,7 @@ if len(sys.argv) == 1 :
     print "program usage:\n\tpython session-rebuffers.py <log-file>\n"
     sys.exit(1) 
 
-command = "python parser.py " + sys.argv[1] + " | sort -k 14,16 | awk '{print $14\", \"$16}'"
+command = "python parser.py " + sys.argv[1] + " | sort -k 14,14 -k 16,16 | awk '{print $14\", \"$16}'"
 process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 output, err = process.communicate()
 session_list = output.split('\n')
@@ -38,6 +38,7 @@ for s in session_list:
         if current_session != 0:
             rebuffer_list.append((current_session, session_rebuffers))
         current_session = s.split(',')[0]
+        print s;
         session_rebuffers = int(s.split(',')[1], 10)
         continue
     session_rebuffers = int(s.split(',')[1], 10)

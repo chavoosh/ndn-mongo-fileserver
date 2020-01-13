@@ -25,7 +25,7 @@ if len(sys.argv) == 1 :
     print "program usage:\n\tpython session-avg-jitter.py <log-file>\n"
     sys.exit(1) 
 
-command = "python parser.py " + sys.argv[1] + " | sort -k 14,1 | awk '{print $14\", \"$13}'"
+command = "python parser.py " + sys.argv[1] + " | sort -k 14,14 -k 1,1 | awk '{print $14\", \"$13}'"
 process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 output, err = process.communicate()
 session_list = output.split('\n')

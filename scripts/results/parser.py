@@ -91,7 +91,10 @@ try:
                 record += '/' + stats[i]
             elif stats[i].find('%3D') != -1:
                     stats[i].replace('%3D', ':')
-                    record += ' ' + stats[i].split('%3D')[1]
+                    if stats[i].split('%3D')[1] == '':
+                        record += ' NULL'; # if a key does not have any value
+                    else:
+                        record += ' ' + stats[i].split('%3D')[1]
         print record
         line = f.readline()
 finally:

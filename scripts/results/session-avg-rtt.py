@@ -25,7 +25,7 @@ if len(sys.argv) == 1 :
     print "program usage:\n\tpython session-avg-rtt.py <log-file>\n"
     sys.exit(1) 
 
-command = "python parser.py  " + sys.argv[1] + " | sort -k 14,1 | awk '{print $14\", \"$12}'"
+command = "python parser.py  " + sys.argv[1] + " | sort -k 14,14 -k 1,1 | awk '{print $14\", \"$12}'"
 process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 output, err = process.communicate()
 session_list = output.split('\n')
@@ -49,7 +49,6 @@ for s in session_list:
             avg_list.append((current_session, session_avg_rtt))
         current_session = s.split(',')[0]
         session_n_samples = 1
-        print s.split(',')[1]
         session_avg_rtt = float(s.split(',')[1])
         continue
     session_avg_rtt = ((session_n_samples * session_avg_rtt) + float(s.split(',')[1])) / (session_n_samples + 1)
