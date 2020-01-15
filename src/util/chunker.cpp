@@ -235,6 +235,12 @@ public:
 
     std::string prefix = fpath;
     prefix.erase(0, m_root.size()).insert(0, "/").insert(0, m_prefix.toUri());
+    int found = prefix.find("//");
+    // make sure prefix is well-formatted
+    while (found != -1) {
+      prefix.replace(found, 2, "/");
+      found = prefix.find("//");
+    }
     Name versionedPrefix = Name(prefix).appendVersion(m_versionedPrefix[-1].toVersion());
     std::vector<uint8_t> buffer(m_segmentSize);
     std::filebuf fb;
