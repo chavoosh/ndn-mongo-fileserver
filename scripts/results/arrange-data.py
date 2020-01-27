@@ -8,15 +8,15 @@
 #
 # DESCRIPTION:
 # ------------
-# This script accepts ndn-mongo-fileserver's log file and prints a
-# statistical plot within a given time range.
+# This script accepts a log file including stats Interest from ivisa service and
+# prints a statistical plot within a given time range.
 #
 # Interactive mode:
 #   - Two inputs: The start time and end time, and any session's start time is
 #     between these two inputs should be displayed as plot.
 #   - One input: The start time, and any session's start time after this input
 #     should be displayed as plot.
-#   - No input: All session should be displayed as plot. 
+#   - No input: All session should be displayed as plot.
 #.....................................................................
 import os
 import sys
