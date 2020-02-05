@@ -30,8 +30,6 @@ namespace po = boost::program_options;
 namespace ndn {
 namespace collector {
 
-const uint32_t MAX_VECTOR_SIZE = 10; ///< number of completed *files* before calling printStats
-
 const char* HOME_DIR = (getenv("HOME") == NULL)
                        ? getpwuid(getuid())->pw_dir
                        : getenv("HOME");
@@ -41,7 +39,6 @@ const std::string LOG_PATH = std::string(ROOT_DIR).append("/segment-stats.log");
 time_t rawtime;
 struct tm* timeinfo;
 
-std::vector<std::tuple<std::time_t, Name>> segmentFetchDelayVector;
 std::ofstream FOUT;
 
 class StatsCollector : noncopyable
@@ -82,7 +79,7 @@ public:
   }
 
   static void
-  printStats()
+  printStats(Name stats_name)
   {
     FOUT.open(LOG_PATH, std::ios_base::app);
 
@@ -90,12 +87,8 @@ public:
     timeinfo = std::localtime(&rawtime);
     std::string t = asctime(timeinfo);
 
-    for (auto& element : segmentFetchDelayVector)
-    {
-      FOUT << t.substr(0, t.length()-1) << "  "
-           << std::get<1>(element).toUri() << "\n";
-    }
-    segmentFetchDelayVector.clear();
+    FOUT << t.substr(0, t.length()-1) << "  "
+         << stats_name.toUri() << "\n";
     FOUT.close();
   }
 
@@ -108,13 +101,7 @@ private:
       std::cerr << "Stats Interest: " << interest.getName() << std::endl;
 
     // collect stats
-    segmentFetchDelayVector.push_back(std::make_tuple
-         (std::chrono::system_clock::to_time_t
-            (std::chrono::system_clock::now()), interest.getName()));
-
-    if (segmentFetchDelayVector.size() >= MAX_VECTOR_SIZE) {
-      printStats();
-    }
+    printStats(interest.getName());
 
     // Create Data name based on Interest's name
     Name dataName(interest.getName());
@@ -161,8 +148,7 @@ private:
 void
 signal_callback_handler(int signum)
 {
-  ndn::collector::StatsCollector::printStats();
-  std::cout << "\nProgram is killed ...\n";
+  std::cout << "\nStats-Collector is killed ...\n";
   exit(signum);
 }
 
