@@ -31,17 +31,29 @@ session_list = output.split('\n')
 session_list = filter(None, session_list)
 
 rebuffer_list = [] # each cell stores a tuple <session_id, session_rebuffers>
-current_session = 0
-session_rebuffers = 0
+current_session = "0"
+session_rebuffers = 0 # number of rebufferings during a given session
 for s in session_list:
-    if current_session != s.split(',')[0]:
-        current_session = s.split(',')[0];
-        if current_session != 0:
+    if current_session != s.split(',')[0]:  # new session
+        if current_session != "0":
+            # record number of rebuffers from previous session
             rebuffer_list.append((current_session, session_rebuffers))
-        current_session = s.split(',')[0]
-        session_rebuffers = int(s.split(',')[1], 10)
+        try:
+            session_rebuffers = int(s.split(',')[1], 10)
+            current_session = s.split(',')[0]
+        except ValueError: # invalid record
+            print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+            current_session = "0"
         continue
-    session_rebuffers = int(s.split(',')[1], 10)
+    try:
+        session_rebuffers = int(s.split(',')[1], 10)
+    except ValueError: # invalid record
+        print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+        current_session = "0"
+
+# record number of rebuffers for the last session
+if current_session != "0":
+    rebuffer_list.append((current_session, session_rebuffers))
 
 f = open("data.txt", "w+")
 for s in rebuffer_list:
