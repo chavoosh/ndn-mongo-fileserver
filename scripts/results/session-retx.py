@@ -32,22 +32,29 @@ session_list = output.split('\n')
 session_list = filter(None, session_list)
 
 retx_list = [] # each cell stores a tuple <session_id, session_retxs>
-current_session = 0
-session_retxs = 0
+current_session = "0"
+session_retx = 0 # number of retx during a given session
 for s in session_list:
+    if current_session != s.split(',')[0]:  # new session
+        if current_session != "0":
+            # record number of rebuffers from previous session
+            retx_list.append((current_session, session_retx))
+        try:
+            session_retx = int(s.split(',')[1], 10)
+            current_session = s.split(',')[0]
+        except ValueError: # invalid record
+            print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+            current_session = "0"
+        continue
     try:
-        int(s.split(',')[1], 10)
-    except ValueError:
-        print 'invalid record ' + s
-        continue
-    if current_session != s.split(',')[0]:
-        current_session = s.split(',')[0];
-        if current_session != 0:
-            retx_list.append((current_session, session_retxs))
-        current_session = s.split(',')[0]
-        session_retxs = int(s.split(',')[1], 10)
-        continue
-    session_retxs = int(s.split(',')[1], 10)
+        session_retx = int(s.split(',')[1], 10)
+    except ValueError: # invalid record
+        print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+        current_session = "0"
+
+# record number of rebuffers for the last session
+if current_session != "0":
+    retx_list.append((current_session, session_retx))
 
 f = open("data.txt", "w+")
 for s in retx_list:
