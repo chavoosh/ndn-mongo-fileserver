@@ -32,28 +32,28 @@ session_list = output.split('\n')
 session_list = filter(None, session_list)
 
 nack_list = [] # each cell stores a tuple <session_id, session_nacks>
-current_session = "0"
+current_session = "VOID"
 session_nacks= 0 # number of nacks during a given session
 for s in session_list:
     if current_session != s.split(',')[0]:  # new session
-        if current_session != "0":
+        if current_session != "VOID":
             # record number of nacks from previous session
             nack_list.append((current_session, session_nacks))
         try:
-            session_nacks = int(s.split(',')[1], 10)
             current_session = s.split(',')[0]
+            session_nacks = int(s.split(',')[1], 10)
         except ValueError: # invalid record
             print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
-            current_session = "0"
+            current_session = "VOID"
         continue
     try:
         session_nacks = int(s.split(',')[1], 10)
     except ValueError: # invalid record
         print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
-        current_session = "0"
+        current_session = "VOID"
 
 # record number of rebuffers for the last session
-if current_session != "0":
+if current_session != "VOID":
     nack_list.append((current_session, session_nacks))
 f = open("data.txt", "w+")
 for s in nack_list:

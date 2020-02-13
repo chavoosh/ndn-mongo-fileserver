@@ -38,7 +38,16 @@ import sys
 import getopt
 import subprocess
 
-prefix_size = 4
+class bcolors:
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+prefix_size = 4 # /ndn/web/stats/video
 ignore_buf_dur = True
 log_file=""
 
@@ -62,7 +71,7 @@ for opt, arg in opts:
         ignore_buf_dur = False
 
 log_file = sys.argv[1]
-
+invalid_records = []
 try:
     f = file(log_file, "r")
     line = f.readline()
@@ -84,18 +93,21 @@ try:
         for i in range(prefix_size, len(stats)):
             # check whether to print out the rebuffering durations (this can be long)
             if ignore_buf_dur and stats[i].find('bufferingDuration') != -1:
-                line = f.readline()
-                continue
-
+                break
             if stats[i].find('%') == -1:
                 record += '/' + stats[i]
             elif stats[i].find('%3D') != -1:
-                    stats[i].replace('%3D', ':')
-                    if stats[i].split('%3D')[1] == '':
-                        record += ' NULL'; # if a key does not have any value
-                    else:
-                        record += ' ' + stats[i].split('%3D')[1]
+                if stats[i].split('%3D')[0] == 'session' and stats[i].split('%3D')[1].isdigit() == False:
+                    invalid_records.append(bcolors.FAIL + 'SESSION ID is not valid. ' + bcolors.ENDC  +  'RECORD: ' + line)
+                elif stats[i].split('%3D')[1] == '':
+                    record += ' NULL'; # if a key does not have any value
+                else:
+                    record += ' ' + stats[i].split('%3D')[1]
         print record
         line = f.readline()
 finally:
+    if len(invalid_records) > 0:
+        print(bcolors.WARNING + 'WARNING: List of invalid records during parsing:' + bcolors.ENDC)
+        for r in invalid_records:
+            print r
     f.close()
