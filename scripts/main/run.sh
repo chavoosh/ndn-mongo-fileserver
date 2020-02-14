@@ -10,29 +10,28 @@
 # DESCRIPTION:
 # ------------
 # This script runs NFD daemon (based on config file under /usr/local/etc/ndn directory
-# default ndn certificate) and then connects to an NDN hub via a TCP or UDP tunnel.
-# According to the first argument (i.e., nameprefix) it starts stats-collector and
-# ndn-mongo-fileserver.
+# and then connects to an NDN hub via a TCP or UDP tunnel.
+# It starts the fileserver under the first input (i.e., nameprefix). Also if a nameprefix
+# for stats-collector is provided it will start stats-collector under that nameprefix.
 #
 #
 # Program usage:
-#    bash run-ndn-server.sh [nameprefix of videos and stats]
+#    bash run-ndn-server.sh [nameprefix of videos]
 #                           [<tcp> | <udp>]
 #                           [HUB address]
-#			                      [<with-stats> | <no-stats>]
+#			                      [nameprefix of stats-collector | <no-stats>(default)]
 #			                      [version number]
-# 
+#
 # Note: You will be prompted for password the very first time.
 #...............................................................
 
-
-if [ $# -lt 4 ]
+if [ $# -lt 3 ]
 then
 	echo -e '\nprogram usage: bash run.sh <options>'
-	echo -e '\tfirst arg  :    nameprefix of videos and stats (e.g., /ndn/web)'
+	echo -e '\tfirst arg  :    nameprefix of videos and stats (e.g., /ndn/web/video)'
 	echo -e '\tsecond arg :    transport protocol to connect to the hub (i.e., <tcp> or <udp>)'
 	echo -e '\tthird arg  :    address of the hub to connect to (e.g., hobo.cs.arizona.edu)'
-  echo -e '\tfourth arg :    enable running stats-collector by passing <with-stats> (default is disable)'
+  echo -e '\tfourth arg :    nameprefix under which to run stats-collector (<no-stats>: do not run stats-collector(default))'
 	echo -e '\tfifth arg  :    serve a specific version of all videos [optional]'
 elif { [ "$2" == "tcp" ] || [ "$2" == "udp" ]; }
 then
@@ -60,25 +59,25 @@ then
   #...................#
   # STATS-COLLECTOR
   #...................#
-  if [ "$4" == "with-stats" ]
+  if [[ $# -gt 3]] && [["$4" != "no-stats" ]]
   then
-    stats-collector $1/stats &
+    stats-collector $4 &
   fi
 
   #....................................................#
   # NDN Mongo File Server (by default for video files)
   #....................................................#
-  if [ $# -gt 5 ] 
+  if [ $# -gt 4 ]
   then
-    ndn-mongo-fileserver $1/video -s 8000 -e "$5" && wait
+    ndn-mongo-fileserver $1 -s 8000 -e "$5" && wait
   else
-    ndn-mongo-fileserver $1/video -s 8000 && wait
+    ndn-mongo-fileserver $1 -s 8000 && wait
   fi
 else
   echo -e '\nprogram usage: bash run.sh <options>'
   echo -e '\tfirst arg  :    nameprefix of videos and stats (e.g., /ndn/web)'
   echo -e '\tsecond arg :    transport protocol to connect to the hub (i.e., <tcp> or <udp>)'
   echo -e '\tthird arg  :    address of the hub to connect to (e.g., hobo.cs.arizona.edu)'
-  echo -e '\tfourth arg :    enable running stats-collector by passing <with-stats> (default is disable)'
+  echo -e '\tfourth arg :    nameprefix under which to run stats-collector (<no-stats>: do not run stats-collector(default))'
   echo -e '\tfifth arg  :    serve a specific version of all videos [optional]'
 fi
