@@ -51,6 +51,7 @@ def sort_func2(arr):
 def process():
     global id_map
     global content
+    global session_num
     global rc
     for line in content:
         lines = line.split('session%3D')[1]
@@ -61,7 +62,7 @@ def process():
             id_map[session_id].append(line)
         else:
             id_map[session_id].append(line)
-
+    session_num = len(id_map)
     for key in id_map:
         id_map[key] = sorted(id_map[key], key=sort_func)
         rc.append(id_map[key])
@@ -129,6 +130,7 @@ writer = []
 rc = []
 content = []
 id_map = {}
+session_num = 0
 Months = {
     'Jan': 1,
     'Feb': 2,
@@ -145,7 +147,7 @@ Months = {
 
 try:
     parser = argparse.ArgumentParser(prog='arrange-data.py')
-    parser.add_argument('-p', choices=['jitter', 'rebuffers', 'rtt'], metavar='Valid Options',
+    parser.add_argument('-p', choices=['jitter', 'rebuffers', 'rtt','retx','timeout','nack'], metavar='Valid Options',
                         nargs=1,help='Your choice of options is jitter, rebuffers, or rtt')
     parser.add_argument('i', metavar='Input File', nargs=1, type = check_file,
                         help='You need to have a input file for drawing plots')
@@ -160,6 +162,7 @@ try:
         content = f.readlines()
     content = [x.strip() for x in content]
     process()
+    print 'Number of video sessions: ' + str(session_num)
     print 'Earliest time is ' + rc[0][0].split()[1] + '/' \
         + rc[0][0].split()[2] + '/' + rc[0][0].split()[4] + ' ' \
         + rc[0][0].split()[3]
@@ -167,20 +170,19 @@ try:
     print 'Lastest time is ' + rc[-1][0].split()[1] + '/' \
         + rc[-1][0].split()[2] + '/' + rc[-1][0].split()[4] + ' ' \
         + rc[-1][0].split()[3]
-    print 'Plecase type a date range'
+    print 'Please type a date range'
     date_range = sys.stdin.readline()
     type_plot = d['p'][0]
     command = ''
-    if type_plot != 'rebuffers':
+    if type_plot == 'jitter' or type_plot == 'rtt':
         command = 'python session-avg-' + type_plot + '.py'
     else:
         command = 'python session-' + type_plot + '.py'
     judge = False
     if len(date_range.strip()) == 0:
-
         print 'print all plot'
         judge = True
-        command = command + ' segment-stats.log'
+        command = command + ' ' + file_name
     elif date_range.strip().find('-') == -1:
         print 'one date specific'
         check_one_date(convert_date(date_range))
