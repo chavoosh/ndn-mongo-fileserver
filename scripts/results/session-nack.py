@@ -52,7 +52,7 @@ for s in session_list:
         print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
         current_session = "VOID"
 
-# record number of rebuffers for the last session
+# record number of nacks for the last session
 if current_session != "VOID":
     nack_list.append((current_session, session_nacks))
 f = open("data.txt", "w+")

@@ -37,7 +37,7 @@ session_retx = 0 # number of retx during a given session
 for s in session_list:
     if current_session != s.split(',')[0]:  # new session
         if current_session != "VOID":
-            # record number of rebuffers from previous session
+            # record number of retxs from previous session
             retx_list.append((current_session, session_retx))
         try:
             current_session = s.split(',')[0]
@@ -52,7 +52,7 @@ for s in session_list:
         print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
         current_session = "VOID"
 
-# record number of rebuffers for the last session
+# record number of retxs for the last session
 if current_session != "VOID":
     retx_list.append((current_session, session_retx))
 
