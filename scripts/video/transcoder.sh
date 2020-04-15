@@ -33,7 +33,7 @@ renditions=(
   "1080       6000     high      4.2"
 )
 
-x264opt=( -x264opts scenecut=0:open_gop=0:min-keyint=72:keyint=72)
+x264opt=( -x264opts "keyint=24:min-keyint=24:no-scenecut")
 #########################################################################
 
 for rendition in "${renditions[@]}"; do
