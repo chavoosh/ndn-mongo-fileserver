@@ -212,6 +212,15 @@ def find_first_match(user_input):
              return date
       return None
 
+def trimmer(uin):
+    return uin.lower().strip()
+
+def print_error_message():
+    print (bcolors.WARNING + 'Invalid input. The correct format of the input is: ' + \
+           'Month(Jan, Feb, ..)/Day(1-31)/Year Hour(1-24):Minute(0-59):Second(0-59).' + bcolors.ENDC)
+
+
+
 parser = argparse.ArgumentParser(prog='arrange-data.py')
 parser.add_argument('-p', choices=NET_OPT, metavar='plot options', nargs=1,
        help=', '.join(NET_OPT), required =False)
@@ -251,7 +260,7 @@ while (True):
            print 'You can choose a network charaistic for plotting: ' +\
            ', '.join(NET_OPT)
            readline.set_completer(network_completer)
-           uin = raw_input().lower()
+           uin = trimmer(raw_input())
            if uin in NET_OPT:
                _p = uin
            else:
@@ -260,14 +269,14 @@ while (True):
         readline.set_completer(completer)
 
         print 'Enter start date and time:'
-        start = raw_input().lower()
-        start_time = start if len(start) != 0 else str(earliest_time).lower()
+        start = trimmer(raw_input())
+        start_time = start if len(start) != 0 else trimmer(str(earliest_time))
         if find_first_match(start_time) == None:
             print (bcolors.WARNING + 'Warning there is no matching date/time.' + bcolors.ENDC)
             continue
         print 'Enter end date and time:'
-        end = raw_input().lower()
-        end_time = end if len(end) != 0 else str(latest_time).lower()
+        end = trimmer(raw_input())
+        end_time = end if len(end) != 0 else trimmer(str(latest_time))
         if find_first_match(end_time) == None:
             print (bcolors.WARNING + 'Warning there is no matching date/time.' + bcolors.ENDC)
             continue
@@ -288,7 +297,7 @@ while (True):
                bcolors.BOLD + '(default)' + bcolors.ENDC)
         print ('  2. Choose another plot')
         print ('  3. Quit')
-        uin = raw_input().lower()
+        uin = trimmer(raw_input())
         if uin == '2' or uin == '2.':
             _p = ''
         elif uin == '3' or uin == '3.':
@@ -307,6 +316,3 @@ while (True):
         print_error_message()
         continue
 
-def print_error_message():
-    print (bcolors.WARNING + 'Invalid input. The correct format of the input is: ' + \
-           'Month(Jan, Feb, ..)/Day(1-31)/Year Hour(1-24):Minute(0-59):Second(0-59).' + bcolors.ENDC)
