@@ -32,23 +32,29 @@ session_list = output.split('\n')
 session_list = filter(None, session_list)
 
 timeout_list = [] # each cell stores a tuple <session_id, session_timeouts>
-current_session = 0
-session_timeouts = 0
+current_session = "VOID"
+session_timeout = 0 # number of timeouts during a given session
 for s in session_list:
+    if current_session != s.split(',')[0]:  # new session
+        if current_session != "VOID":
+            # record number of timeouts from previous session
+            timeout_list.append((current_session, session_timeout))
+        try:
+            current_session = s.split(',')[0]
+            session_timeout = int(s.split(',')[1], 10)
+        except ValueError: # invalid record
+            print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+            current_session = "VOID"
+        continue
     try:
-        int(s.split(',')[1], 10)
-    except ValueError:
-        print 'invalid record ' + s
-        continue
-    if current_session != s.split(',')[0]:
-        current_session = s.split(',')[0];
-        if current_session != 0:
-            timeout_list.append((current_session, session_timeouts))
-        current_session = s.split(',')[0]
-        session_timeouts = int(s.split(',')[1], 10)
-        continue
-    session_timeouts = int(s.split(',')[1], 10)
+        session_timeout = int(s.split(',')[1], 10)
+    except ValueError: # invalid record
+        print "INVALID RECORD: [" + s + "] session " + current_session + " is ignored..."
+        current_session = "VOID"
 
+# record number of timeouts for the last session
+if current_session != "VOID":
+    timeout_list.append((current_session, session_timeout))
 f = open("data.txt", "w+")
 for s in timeout_list:
     f.write("%s %d\n" % (s[0], s[1]))

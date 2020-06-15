@@ -1,6 +1,6 @@
-# NDN Sevres Files From MongoDB
+# NDN Serves Files From MongoDB
 
-NDN-MONGO-FILESERVER tool-bundle is part of [iViSA project](https://ivisa.named-data.net) which includes the following tools:
+NDN-MONGO-FILESERVER tool-bundle is part of [iViSA project](https://ivisa.named-data.net), containing the following tools:
 1. [ndn-mongo-fileserver](src/mongo-fileserver)
 2. [chunker](src/util)
 3. [stats-collector](src/util)
@@ -38,38 +38,38 @@ Install the mentioned version of the following packages:
 
 ### Build Steps
 To configure, compile, and install this tool-bundle, type the following commands
-in the source directory:
+in repository's root directory:
 
       $ ./waf configure
       $ ./waf
       $ sudo ./waf install
 
 ### Quick test
-To make sure the tool-bundle is installed properly here is a quick test:
+Here is a quick test to make sure that the tool-bundle is installed properly:
 
 1. Run MongoDB service:
 
        $ sudo systemctl start mongod.service
 
-2. Chunk a content and populate the DB (the following command breaks down the input file into
-1kB chunks with version 1 where each chunk's name looks like: `/ndn/test/README.md/%FD%01/<segment-number>`)
+2. Chunk a content and populate the DB. The following command breaks the input file into
+1kB chunks with version 1. Name of each chunk follows this pattern: `/ndn/test/README.md/%FD%01/<segment-number>`)
 
        $ chunker /ndn/test -i ~/ndn-mongo-fileserver/README.md -s 1000 -e 1
 
-3. Run NFD and then run fileserver to serve the available contents in the DB (the following command lets the fileserver to answer
-all Interests whose name start with `/ndn/test`):
+3. Run NFD and then run fileserver to serve the available contents in the DB. The following command runs the fileserver,
+and asks it to answer all Interests whose name start with `/ndn/test`):
 
         $ ndn-mongo-fileserver /ndn/test
 4. Open [segment-fetcher.html](util/segment-fetcher.html) in browser and ask for `/ndn/test/README.md`.
 
-If no error occurred during any step you can safely quite the fileserver and be sure that the tool-bundle works properly. 
+If no error occurred during any step you can safely quit the fileserver and be sure that the tool-bundle works properly.
 
 # Frontend
-To learn how to watch the published videos in modern browsers visit [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend).
+To learn how to watch the published videos in a modern browser visit [ndn-video-frontend](https://github.com/chavoosh/ndn-video-frontend).
 
 # Serve videos via NDN testbed
 After setting up the NDN fileserver you might want to serve your videos via NDN testbed. To do this, take the following steps:
-1. [Get a valid certificate](https://ndncert.named-data.net/help) from NDN testbed and set it up on your server. Assume your certificate name is `/ndn/my/cert`.
+1. [Get a valid certificate](https://ndncert.named-data.net/help) from the NDN testbed and set it up on your server. Given your certificate name is `/ndn/my/cert`.
 
 2. Encode, package, and chunk your video(s). To do this, first update `base` in [`driver.sh`](scripts/video/driver.sh#L113) file to your cert (e.g., `/ndn/my/cert/video`), and then run the following command:
     
