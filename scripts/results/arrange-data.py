@@ -271,13 +271,15 @@ while (True):
         print 'Enter start date and time:'
         start = trimmer(raw_input())
         start_time = start if len(start) != 0 else trimmer(str(earliest_time))
-        if find_first_match(start_time) == None:
+        start_time = find_first_match(start_time)
+        if start_time == None:
             print (bcolors.WARNING + 'Warning there is no matching date/time.' + bcolors.ENDC)
             continue
         print 'Enter end date and time:'
         end = trimmer(raw_input())
         end_time = end if len(end) != 0 else trimmer(str(latest_time))
-        if find_first_match(end_time) == None:
+        end_time = find_first_match(end_time)
+        if end_time == None:
             print (bcolors.WARNING + 'Warning there is no matching date/time.' + bcolors.ENDC)
             continue
         print ('Start data and time: ' + bcolors.OKGREEN + start_time.upper() + bcolors.ENDC +
