@@ -302,7 +302,7 @@ while (True):
         uin = trimmer(raw_input())
         if uin == '2' or uin == '2.':
             _p = ''
-        elif uin == '3' or uin == '3.':
+        elif uin == '3' or uin == '3.' or trimmer(uin) == 'q':
             exit(0)
 
     except ValueError:
