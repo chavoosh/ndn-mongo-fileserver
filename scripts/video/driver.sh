@@ -1,6 +1,6 @@
 #!/bin/bash
 #................................................................................
-# Copyright (c) 2016-2019, Regents of the University of Arizona.
+# Copyright (c) 2019-2020, Regents of the University of Arizona.
 # Author: Chavoosh Ghasemi <chghasemi@cs.arizona.edu>
 #
 # You should have received a copy of the GNU General Public License along with

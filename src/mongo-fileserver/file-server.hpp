@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 /*
- * Copyright (c) 2016-2019, Regents of the University of Arizona.
+ * Copyright (c) 2019-2020, Regents of the University of Arizona.
  * Author: Chavoosh Ghasemi <chghasemi@cs.arizona.edu>
  *
  * ndn-mongo-fileserver is free software: you can redistribute it and/or modify it

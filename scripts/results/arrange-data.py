@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #.....................................................................
-# Copyright (c) 2016-2020, Regents of the University of Arizona.
+# Copyright (c) 2019-2020, Regents of the University of Arizona.
 # Author:Wenkai Zheng<wenkaizheng@email.arizona.edu>
 #
 # You should have received a copy of the GNU General Public License along with

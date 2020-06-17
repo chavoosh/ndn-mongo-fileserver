@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #.....................................................................
-# Copyright (c) 2016-2020, Regents of the University of Arizona.
+# Copyright (c) 2019-2020, Regents of the University of Arizona.
 # Author: Wenkai Zheng <wenkaizheng@email.arizona.edu>
 #         Chavoosh Ghasemi <chghasemi@cs.arizona.edu>
 
