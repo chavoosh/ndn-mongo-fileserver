@@ -17,3 +17,6 @@
 # Compiled python code
 __pycache__/
 *.py[cod]
+
+# Shadow files
+*.swp 
