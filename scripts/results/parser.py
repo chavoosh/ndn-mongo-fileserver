@@ -55,23 +55,14 @@ class Input_Options:
 
 # CONST
 NUMBER_OF_FIELDS = 16
-FIELDS = {
-    'Date': 0,
-    'Name': 1,
-    'Stat': 2,
-    'Hub' : 3,
-    'Cip' : 4,
-    'Ebw' : 5,
-    'Retx': 6,
-    'Tout': 7,
-    'Nack': 8,
-    'Segm': 9,
-    'Retr': 10,
-    'Rtt' : 11,
-    'Jitt': 12,
-    'Sid' : 13,
-    'Strt': 14,
-    'Reb' : 15}
+FIELDS = ['Date', 'Name', 'Stat', 'Hub' ,\
+          'Uip' , 'Ebw' , 'Retx', 'Tout',\
+          'Nack', 'Segm', 'Rdel', 'Rtt' ,\
+          'Jitt', 'Sid' , 'Strt', 'Reb']
+
+FIELDS_MAP = {}
+for i in range(0, len(FIELDS)):
+    FIELDS_MAP.update({FIELDS[i]: i})
 
 MONTHS = {
     'JAN': 1,

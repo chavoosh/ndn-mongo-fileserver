@@ -13,7 +13,7 @@ import getopt
 from parser import *
 
 def help_message():
-    print "program usage:\n\tpython cmd-parser.py <log-file>\n",\
+    print "program usage:\n\tpython term_parser.py <log-file>\n",\
           "\t-l: length of fixed prefix\n",\
           "\t-b: [FLAG] enable including rebuffering durations (if any)\n",\
           "\t-p: [FLAG] enable printing processed lines in stdout\n"
