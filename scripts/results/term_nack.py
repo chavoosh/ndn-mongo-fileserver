@@ -31,27 +31,11 @@ except getopt.GetoptError:
 plot_type = 'avg'
 for opt, arg in opts:
     if opt == '-c':
-        plot_type = 'cum'
+        plot_type = 'cdf'
 
-if plot_type == 'cum':
-    script = ["set terminal dumb\n",
-              "set title 'CDF of Nacks of all files (including audio/video/playlist segments)'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel '# of nacks'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:1 title '' w points"]
+if plot_type == 'cdf':
     cdf_map = cdf('Nack', sys.argv[1])
-    plotter(cdf_map, script)
+    plotter(cdf_map, SCRIPTS['Nack']['CDF'])
 else:
-    script = ["set terminal dumb\n",
-              "set title 'Number of nacks during each session'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel 'session id'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:xticlabels(1) title '' w points"]
     nack_map = cumulative('Nack', sys.argv[1])
-    plotter(nack_map, script)
+    plotter(nack_map, SCRIPTS['Nack']['DEF'])

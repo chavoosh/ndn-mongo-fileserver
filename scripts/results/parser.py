@@ -106,6 +106,8 @@ def sort_sessions(session_map, rc):
         session_map[sid] = sorted(session_map[sid], key=get_record_datetime)
         rc.append(session_map[sid])
     rc = sorted(rc, key=get_record_datetime)
+    return rc
+
 
 def parser(log, inopts):
     invalid_lines = [] # contain lines that cannot be parsed
@@ -181,7 +183,7 @@ def parser(log, inopts):
                 print record
         line = f.readline()
     f.close()
-    sort_sessions(session_map, rc)
+    rc = sort_sessions(session_map, rc)
     if len(invalid_lines) > 0:
         print(BColors.BOLD + '--------------\nINVALID LINES:\n--------------' + BColors.ENDC)
         for l in invalid_lines:

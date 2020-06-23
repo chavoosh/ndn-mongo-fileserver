@@ -30,27 +30,11 @@ except getopt.GetoptError:
 plot_type = 'avg'
 for opt, arg in opts:
     if opt == '-c':
-        plot_type = 'cum'
+        plot_type = 'cdf'
 
-if plot_type == 'cum':
-    script = ["set terminal dumb\n",
-              "set title 'CDF of downloaded segments of all files (including audio/video/playlist segments)'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel '# of downloaded segments'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:1 title '' w points"]
+if plot_type == 'cdf':
     cdf_map = cdf('Segm', sys.argv[1])
-    plotter(cdf_map, script)
+    plotter(cdf_map, SCRIPTS['Segm']['CDF'])
 else:
-    script = ["set terminal dumb\n",
-              "set title 'Number of downloaded segments/chunks in each session'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel 'session id'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:xticlabels(1) title '' w points"]
     segments_map = cumulative('Segm', sys.argv[1])
-    plotter(segments_map, script)
+    plotter(segments_map, SCRIPTS['Segm']['DEF'])

@@ -30,27 +30,11 @@ except getopt.GetoptError:
 plot_type = 'avg'
 for opt, arg in opts:
     if opt == '-c':
-        plot_type = 'cum'
+        plot_type = 'cdf'
 
-if plot_type == 'cum':
-    script = ["set terminal dumb\n",
-              "set title 'CDF of startup delay of all sessions'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel 'Startup Delay (s)'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:1 title '' w points"]
+if plot_type == 'cdf':
     cdf_map = cdf('Strt', sys.argv[1])
-    plotter(cdf_map, script)
+    plotter(cdf_map, SCRIPTS['Strt']['CDF'])
 else:
-    script = ["set terminal dumb\n",
-              "set title 'Startup delay of each session (s)'\n",
-              "set key inside bottom right\n",
-              "set ytics out\n",
-              "set xtics out\n",
-              "set xlabel 'session id'\n",
-              "set offset graph 0.1, graph 0.1, graph 0.1, graph 0.1\n",
-              "plot 'data.txt' using 2:xticlabels(1) title '' w points"]
     startup_map = absolute('Strt', sys.argv[1])
-    plotter(startup_map, script)
+    plotter(startup_map, SCRIPTS['Strt']['DEF'])

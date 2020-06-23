@@ -20,13 +20,14 @@ CUM_METRICS = [FIELDS[i] for i in range(6, 10)]
 AVG_METRICS  = [FIELDS[i] for i in range(10, 13)]
 ABS_METRICS  = [FIELDS[14], FIELDS[15]]
 
-def cumulative(metric, log):
+def cumulative(metric, log, rc=[]):
     if metric not in CUM_METRICS:
         print (BColors.WARNING + 'WARNING: "' + metric + '" is not a valid metric...' + BColors.ENDC)
         print ('\tChoose from: ' + BColors.BOLD + ', '.join(CUM_METRICS) + BColors.ENDC)
         sys.exit(1)
-    inopts = Input_Options()
-    rc = parser(log, inopts)
+    if len(rc) == 0:
+        inopts = Input_Options()
+        rc = parser(log, inopts)
     metric_map = [] # map a session id to its enumerated metric
     for session in rc:
         counter = 0
@@ -38,13 +39,14 @@ def cumulative(metric, log):
         metric_map.append([record[FIELDS_MAP['Sid']], counter])
     return metric_map
 
-def average(metric, log):
+def average(metric, log, rc=[]):
     if metric not in AVG_METRICS:
         print (BColors.WARNING + 'WARNING: "' + metric + '" is not a valid metric...' + BColors.ENDC)
         print ('\tChoose from: ' + BColors.BOLD + ', '.join(AVG_METRICS) + BColors.ENDC)
         sys.exit(1)
-    inopts = Input_Options()
-    rc = parser(log, inopts)
+    if len(rc) == 0:
+        inopts = Input_Options()
+        rc = parser(log, inopts)
     metric_map = [] # map a session id to its avg metric
     for session in rc:
         metric_sum = 0.0
@@ -59,32 +61,34 @@ def average(metric, log):
             metric_map.append([record[FIELDS_MAP['Sid']], float(metric_sum/n_samples)])
     return metric_map
 
-def absolute(metric, log):
+def absolute(metric, log, rc=[]):
     if metric not in ABS_METRICS:
         print (BColors.WARNING + 'WARNING: "' + metric + '" is not a valid metric...' + BColors.ENDC)
         print ('\tChoose from: ' + BColors.BOLD + ', '.join(ABS_METRICS) + BColors.ENDC)
         sys.exit(1)
-    inopts = Input_Options()
-    rc = parser(log, inopts)
+    if len(rc) == 0:
+        inopts = Input_Options()
+        rc = parser(log, inopts)
     metric_map = [] # map a session id to its absolute metric
     for session in rc:
         abs_metric = None
         try:
-            abs_metric = float(session[len(session) - 1][FIELDS_MAP[metric]])
+            abs_metric = float(session[-1][FIELDS_MAP[metric]])
         except:
             continue
         if abs_metric != None:
             metric_map.append([session[0][FIELDS_MAP['Sid']], abs_metric])
     return metric_map
 
-def cdf(metric, log):
+def cdf(metric, log, rc=[]):
     if metric not in CUM_METRICS and metric not in AVG_METRICS and metric not in ABS_METRICS:
         print (BColors.WARNING + 'WARNING: "' + metric + '" is not a valid metric...' + BColors.ENDC)
         print ('\tChoose from: ' + BColors.BOLD + ', '.join(CUM_METRICS) +\
                ', '.join(AVG_METRICS) + ', '.join(ABS_METRICS) + BColors.ENDC)
         sys.exit(1)
-    inopts = Input_Options()
-    rc = parser(log, inopts)
+    if len(rc) == 0:
+        inopts = Input_Options()
+        rc = parser(log, inopts)
     cdf_map = [] # map a metric sample to its probability
     samples = []
     sample = None
