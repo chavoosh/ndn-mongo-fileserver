@@ -26,6 +26,7 @@ import readline
 from parser import *
 from plotter import *
 from session_metrics import *
+from tabulate_stats import tabulate_stats
 
 # Global
 rc = [] # contain a timewise sorted group of arrays, each of which keeps sorted lines of a session
@@ -42,7 +43,8 @@ NET_METRICS = {
     'timeout': 'Tout',
     'segments': 'Segm',
     'rebuffers': 'Reb',
-    'retransmissions': 'Retx'}
+    'retransmissions': 'Retx',
+    'tabular_stats': 'Table'}
 NET_METRIC_OPTS = []
 for metric in NET_METRICS:
     NET_METRIC_OPTS.append(metric)
@@ -211,7 +213,10 @@ while (True):
             data_map = average(NET_METRICS[n_metric], log, selected_sessions)
         elif NET_METRICS[n_metric] in ABS_METRICS:
             data_map = absolute(NET_METRICS[n_metric], log, selected_sessions)
-        plotter(data_map, SCRIPTS[NET_METRICS[n_metric]]['DEF'])
+        else:
+            tabulate_stats(log, selected_sessions)
+        if data_map != None:
+            plotter(data_map, SCRIPTS[NET_METRICS[n_metric]]['DEF'])
 
         print ('SELECT AN OPTION:')
         print ('  '+ BColors.UNDERLINE + '1.' + BColors.ENDC + ' Choose another date/time ' +\

@@ -13,7 +13,6 @@ import getopt
 from session_metrics import average, cdf
 from plotter import *
 
-
 def help_message():
     print "program usage:\n\tpython term_jitter.py <log-file>\n",\
           "\t-a: [FLAG] Average jitter of each session (default)\n",\

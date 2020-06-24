@@ -42,6 +42,10 @@ import datetime
 class BColors:
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
+    OKCYNE = '\033[96m'
+    OKPINK = '\033[95m'
+    OKORANGE = '\033[33m'
+    OKGRAY = '\033[37m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
     ENDC = '\033[0m'

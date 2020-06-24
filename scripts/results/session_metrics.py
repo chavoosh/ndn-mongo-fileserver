@@ -17,8 +17,8 @@ import sys
 from parser import *
 
 CUM_METRICS = [FIELDS[i] for i in range(6, 10)]
-AVG_METRICS  = [FIELDS[i] for i in range(10, 13)]
-ABS_METRICS  = [FIELDS[14], FIELDS[15]]
+AVG_METRICS = [FIELDS[i] for i in range(10, 13)]
+ABS_METRICS = [FIELDS[14], FIELDS[15]]
 
 def cumulative(metric, log, rc=[]):
     if metric not in CUM_METRICS:
@@ -38,6 +38,45 @@ def cumulative(metric, log, rc=[]):
                 continue
         metric_map.append([record[FIELDS_MAP['Sid']], counter])
     return metric_map
+
+def bandwidth_categorizer(bw, arg):
+    if (bw < 600000):
+        arg['240p'] += 1
+    elif (bw < 1500000):
+        arg['360p'] += 1
+    elif (bw < 3000000):
+        arg['480p'] += 1
+    elif (bw < 6000000):
+        arg['720p'] += 1
+    else:
+        arg['1080p'] += 1
+    return arg
+
+def video_resolution_dist(log, rc=[]):
+    res_dist_map = [] # map a sid to its video resolution distribution
+    # Required BW : Number of samples
+    if len(rc) == 0:
+        inopts = Input_Options()
+        rc = parser(log, inopts)
+    for session in rc:
+        dist = {'240p'  : 0,
+                '360p'  : 0,
+                '480p'  : 0,
+                '720p'  : 0,
+                '1080p' : 0}
+        samples_in_session = 0
+        for record in session:
+            try:
+                dist = bandwidth_categorizer(int(record[FIELDS_MAP['Ebw']]), dist)
+                samples_in_session += 1
+            except Exception as err:
+                continue
+        if samples_in_session == 0:
+            continue
+        for resolution in dist:
+            dist[resolution] = float(dist[resolution])/float(samples_in_session)
+        res_dist_map.append([session[0][FIELDS_MAP['Sid']], dist])
+    return res_dist_map
 
 def average(metric, log, rc=[]):
     if metric not in AVG_METRICS:
