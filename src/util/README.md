@@ -68,5 +68,5 @@ To see the options of stats-collector program run `$ stats-collector` or `$ <pat
 Collected stats can be found under `~/.chunks` directory on the server.
 
 **IMPORTANT NOTE**: Timestamp in the log files is derived from server's localtime zone, so make sure the
-server's time zone is set to a desirable one. You can check an Ubuntu server's time zone by using this
-command `$ timedatectl` (for more info see [this](https://vitux.com/how-to-change-the-timezone-on-your-ubuntu-system/))
+server's time zone is set to a desirable one you can check timezone on an Ubuntu server by using this
+command `$ timedatectl` (for more info see [this](https://vitux.com/how-to-change-the-timezone-on-your-ubuntu-system/)).
