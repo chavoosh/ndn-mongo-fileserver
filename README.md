@@ -35,6 +35,9 @@ Install the mentioned version of the following packages:
       $ make
       $ sudo make install
 
+Install the following tools for video encoding and packaging:
+- [FFmpeg](https://johnvansickle.com/ffmpeg/) (static builds)
+- [Shaka Packager](https://github.com/google/shaka-packager/releases) (official releases)
 
 ### Build Steps
 To configure, compile, and install this tool-bundle, type the following commands
