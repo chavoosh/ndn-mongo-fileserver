@@ -114,7 +114,7 @@ chunker $base/$filename -i $current_dir/$filename -s $segmentSize -e $version &&
 manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
 
 # cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/2c18ab3d37054c0b725441f2e907b4ca9e3fa7ae/base.html
+input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/cb9ea05b57f769f845398721f68c3f6f4b3b88ac/base.html
 
 MULTISPACES='      '
 line="${MULTISPACES}"'<!-- manifest uri -->\n'
