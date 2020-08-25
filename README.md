@@ -37,6 +37,7 @@ Install the mentioned version of the following packages:
 
 Install the following tools for video encoding and packaging:
 - [FFmpeg](https://johnvansickle.com/ffmpeg/) (static builds)
+- [FFmpeg-bar](https://www.npmjs.com/package/ffmpeg-progressbar-cli) (npm package)
 - [Shaka Packager](https://github.com/google/shaka-packager/releases) (official releases)
 
 ### Build Steps
