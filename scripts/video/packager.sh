@@ -8,6 +8,7 @@
 #...............................................................
 
 error=""
+echoerr() { echo -e "$@" 1>&2; }
 
 if [ $# -lt 4 ]; then
   echo -e "\ndash-packager usage:
@@ -89,10 +90,9 @@ echo -e "Exec command:\n\e[2mpackager ${cmd[@]}\e[0m"
 packager "${cmd[@]}" --segment_duration 2.5 &> $logFile
 
 ll=$(tail -n 1 $logFile)
-echo $ll
 if [[ $ll == *"Error"* ]]; then
   error=$ll
-  echo -e "\e[31mECode:1 (FAILURE)\n$error\e[39m"
+  echoerr "\e[31mECode:1 (FAILURE)\n$error\e[39m"
   rm -rf $3
 else
   echo -e "\e[32mECode:0 (SUCCESS)\e[39m"

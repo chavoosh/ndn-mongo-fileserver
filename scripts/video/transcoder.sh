@@ -7,8 +7,8 @@
 # this script e.g., in COPYING.md file. If not, see <http://www.gnu.org/licenses/>.
 #...............................................................
 
-set -e
 error=""
+echoerr() { echo -e "$@" 1>&2; }
 
 if [ $# -lt 1 ]; then
   echo -e "\nprogram usage: <address of video file>\n
@@ -64,7 +64,7 @@ for rendition in "${renditions[@]}"; do
   else
     # size of the log file exceeds 3 lines upon an error
     error=$(tail -n 1 $logFile)
-    echo -e "\e[31mECode:1 (FAILURE)\n$error\e[39m"
+    echoerr "\e[31mECode:1 (FAILURE)\n$error\e[39m"
     rm ${filename}_h264_${resolution}p.mp4
     rm $logFile
     break # exit
