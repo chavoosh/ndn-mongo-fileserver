@@ -41,6 +41,9 @@ namespace chunker {
 const std::string	DATABASE_NAME = "chunksDB";
 const std::string	COLLECTION_NAME = "chunksCollection";
 uint32_t FRESHNESS_PERIOD = 10;
+uint64_t nFiles = 0;
+uint64_t nChunks = 0;
+uint16_t code = 0; // 0: success o.w. failure
 
 using bsoncxx::builder::stream::close_array;
 using bsoncxx::builder::stream::close_document;
@@ -87,21 +90,26 @@ public:
         else if (is_directory(p))
           m_root = m_inputPath;
         else {
-          std::cout << p << " is neither a regular file nor a directory\n";
+          code = 2;
+          std::cerr << p << " is neither a regular file nor a directory\n";
           return;
         }
       }
-      else
-        std::runtime_error(path + " does not exist.\n");
+      else {
+        code = 4;
+        std::cerr << path << " does not exist..." << std::endl;
+      }
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
-      std::cout << ex.what() << std::endl;
+      code = 1;
+      std::cerr << ex.what() << std::endl;
       return;
     }
 
     // check the segment size
     if (segmentSize > 8000) {
+      code = 1;
       std::cerr << "Max segment size is 8000" << std::endl;
       return;
     }
@@ -163,13 +171,15 @@ public:
         }
       }
       else {
-        std::runtime_error(address + " does not exist.\n");
+        code = 4;
+        std::cerr << address << " does not exist..." << std::endl;
         return;
       }
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
-      std::cout << ex.what() << std::endl;
+      code = 1;
+      std::cerr << ex.what() << std::endl;
       return;
     }
   }
@@ -186,7 +196,8 @@ public:
     }
     catch (const boost::filesystem::filesystem_error& ex)
     {
-      std::cout << ex.what() << std::endl;
+      code = 1;
+      std::cerr << ex.what() << std::endl;
     }
     return false;
   }
@@ -229,7 +240,8 @@ public:
     //std::cerr << "Loading input ..." << std::endl;
 
     if(fpath.find(m_root) == std::string::npos) {
-      std::cerr << "Error: An error occured while loading " << fpath << ". Exit ...\n";
+      code = 4;
+      std::cerr << "An error occured while loading " << fpath << ". Exit ..." << std::endl;
       return 1;
     }
 
@@ -259,12 +271,15 @@ public:
       }
     }
     else {
-      std::cout << "failed to open file " << fpath << "\n";
+      code = 2;
+      std::cerr << "Failed to open file " << fpath << "\n";
       return 1;
     }
 
     if (m_store.empty()) {
-      std::cerr << "No chunk has been created ... Exit ... \n";
+      code = 1;
+      if (m_verbose)
+        std::cerr << "No chunk has been created ... Exit ... \n";
       return 1;
     }
 
@@ -274,7 +289,7 @@ public:
       try {
         bsoncxx::array::view subarray{result->view()["versions"].get_array().value};
         for (const bsoncxx::array::element& sub_ele : subarray) {
-          if ((uint64_t)sub_ele.get_int64().value == m_version) {
+          if ((uint64_t)sub_ele.get_int64().value == m_version && m_verbose) {
             // this version exists, exit
             std::cout << "  version [" << m_version << "] exists, skip the file ...\n";
             return 1;
@@ -294,6 +309,7 @@ public:
         );
       }
       catch (const std::exception& e) {
+        code = 2;
         std::cerr << e.what() << std::endl;
       }
     }
@@ -309,6 +325,7 @@ public:
         verDocOid = retVal->inserted_id().get_oid().value;
       }
       catch (const std::exception& e) {
+        code = 1;
         std::cerr << "version document should not exist. " << e.what() << std::endl;
         return 1;
       }
@@ -363,7 +380,9 @@ public:
         }
       }
       catch (const std::exception& e) {
-        std::cerr << versionedPrefix.toUri() << " exits, no chunk is created..." << std::endl;
+        code = 1;
+        if (m_verbose)
+          std::cerr << versionedPrefix.toUri() << " exits, no chunk is created..." << std::endl;
         return 1;
       }
 
@@ -386,8 +405,13 @@ public:
       }
     }
 
-    std::cerr << "  " << m_store.size() << " chunks is created under prefix {"
-              << versionedPrefix.toUri() << "}" << std::endl;
+    nFiles++;
+    nChunks += m_store.size();
+
+    if (m_verbose) {
+      std::cout << "  " << m_store.size() << " chunks is created under prefix {"
+                << versionedPrefix.toUri() << "}" << std::endl;
+    }
     m_store.clear();
     return 0;
   }
@@ -462,11 +486,13 @@ main (int argc, char** argv)
     po::notify(vm);
   }
   catch (const po::error& e) {
-    std::cerr << "ERROR: " << e.what() << std::endl;
+    ndn::chunker::code = 3;
+    std::cerr << e.what() << std::endl;
     return 2;
   }
   catch (const boost::bad_any_cast& e) {
-    std::cerr << "ERROR: " << e.what() << std::endl;
+    ndn::chunker::code = 3;
+    std::cerr << e.what() << std::endl;
     return 2;
   }
 
@@ -476,17 +502,19 @@ main (int argc, char** argv)
   }
 
   if (prefix.empty() || path.empty()) {
+    ndn::chunker::code = 3;
     usage(std::cerr, programName, visibleDesc);
     return 2;
   }
 
   if (segmentSize > 8000) {
-    std::cerr << "Error: Max segment size is 8000\n";
+    ndn::chunker::code = 3;
+    std::cerr << "Max segment size is 8000\n";
     usage(std::cerr, programName, visibleDesc);
     return 1;
   }
 
-  std::cout << "run summary: \n"
+  std::cout << "Exec settings: \n"
             << "\tpath: " << path << "\n"
             << "\tprefix: " << prefix << "\n"
             << "\tfreshness-period: " << ndn::chunker::FRESHNESS_PERIOD << "\n"
@@ -494,12 +522,20 @@ main (int argc, char** argv)
             << "\tversion: " << version << std::endl;
 
   ndn::chunker::Chunker c(path, prefix, segmentSize, version, verbose);
-  try {
-    c.run();
+  if (ndn::chunker::code == 0) {
+    try {
+      c.run();
+    }
+    catch (const std::exception& e) {
+      ndn::chunker::code = 3;
+      std::cerr << e.what() << std::endl;
+    }
   }
-  catch (const std::exception& e) {
-    std::cerr << "ERROR: " << e.what() << std::endl;
+  std::cerr << "(ECode:" << ndn::chunker::code << ")" << std::endl;
+  if (ndn::chunker::code == 0) {
+    std::cout << "=======================\n"
+              << "No. of inserted files: " << ndn::chunker::nFiles << "\n"
+              << "No. of inserted chunks: " << ndn::chunker::nChunks << std::endl;
   }
-
   return 0;
 }
