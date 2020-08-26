@@ -83,8 +83,6 @@
 #    VIDEO_FILE_NAME.html
 #.................................................................................
 
-set -e
-
 if [ $# -lt 1 ]; then
   echo -e "\nprogram usage: <address of video file>\n"
   exit -1
@@ -93,22 +91,35 @@ fi
 filename=$(basename -- "$1")
 filename="${filename%.*}"
 current_dir="$(pwd)"
+stderr=.driver.stderr
+
+check_stderr() {
+  if grep -q 'ECode:[1-4]' "$stderr";  then
+    cat $stderr
+    echo -e "An error occured while $1. Exit..."
+    rm $stderr
+    exit -1
+  fi
+}
 
 base='/ndn/web/video'
 ################################################
 # transcoding (adjust the resolution in script)
-bash ./transcoder.sh $1 && wait
+bash ./transcoder.sh $1 2> $stderr
+check_stderr encoding
 
 # packager option (adjust the resolution in script)
 protocol=hls
 playlist=playlist.m3u8
-bash ./packager.sh . $filename $filename/$protocol $protocol && wait
+bash ./packager.sh . $filename $filename/$protocol $protocol 2> $stderr
+check_stderr packaging
 
 # chunker options
 version=1
 segmentSize=8000
 
-chunker $base/$filename -i $current_dir/$filename -s $segmentSize -e $version && wait
+chunker $base/$filename -i $current_dir/$filename -s $segmentSize -e $version 2> $stderr
+check_stderr chunking
 
 # html file options
 manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
@@ -122,3 +133,4 @@ line+="${MULTISPACES}"'<span id="manifestUri" hidden>'$manifestUrl'</span>\n\n'
 
 curl $input | sed -n '0, /begin url section/p' > $filename.html && printf "${line}" >> $filename.html
 curl $input | sed -n '/end url section/, $p' >> $filename.html
+rm $stderr
