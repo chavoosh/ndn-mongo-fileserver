@@ -125,8 +125,7 @@ check_stderr chunking
 manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
 
 # cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/cb9ea05b57f769f845398721f68c3f6f4b3b88ac/base.html
-
+input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/3a9dc483855485969b71589142eea5d4e0d25786/base.html
 MULTISPACES='      '
 line="${MULTISPACES}"'<!-- manifest uri -->\n'
 line+="${MULTISPACES}"'<span id="manifestUri" hidden>'$manifestUrl'</span>\n\n'
