@@ -38,8 +38,9 @@ namespace po = boost::program_options;
 namespace ndn {
 namespace chunker {
 
-const std::string	DATABASE_NAME = "chunksDB";
-const std::string	COLLECTION_NAME = "chunksCollection";
+const std::string VERSION = "2.0.0";
+std::string	DATABASE_NAME = "chunksDB";
+std::string	COLLECTION_NAME = "chunksCollection";
 uint32_t FRESHNESS_PERIOD = 10;
 uint64_t nFiles = 0;
 uint64_t nChunks = 0;
@@ -467,8 +468,15 @@ main (int argc, char** argv)
                        "freshness period of Data packets in seconds")
     ("version-no,e",   po::value<uint64_t>(&version),
                        "version under which all files will be published")
+    ("db_name,D",      po::value<std::string>(&ndn::chunker::DATABASE_NAME)\
+                       ->default_value(ndn::chunker::DATABASE_NAME),
+                       "name of the mongo databse")
+    ("collect_name,C", po::value<std::string>(&ndn::chunker::COLLECTION_NAME)\
+                       ->default_value(ndn::chunker::COLLECTION_NAME),
+                       "name of the collection in mongo databse")
     ("verbose,v",      po::bool_switch(&verbose),
-                       "turn on verbose output (per Interest information)");
+                       "turn on verbose output (per Interest information)")
+    ("version,V",      "print this help message and exit");
 
   po::options_description hiddenDesc;
   hiddenDesc.add_options()
@@ -501,6 +509,11 @@ main (int argc, char** argv)
     return 0;
   }
 
+  if (vm.count("version") > 0) {
+    std::cout << "chunker " << ndn::chunker::VERSION << std::endl;
+    return 0;
+  }
+
   if (prefix.empty() || path.empty()) {
     ndn::chunker::code = 3;
     usage(std::cerr, programName, visibleDesc);
@@ -515,6 +528,8 @@ main (int argc, char** argv)
   }
 
   std::cout << "Exec settings: \n"
+            << "\tDatabase: " << ndn::chunker::DATABASE_NAME << "\n"
+            << "\tCollection: " << ndn::chunker::COLLECTION_NAME << "\n"
             << "\tpath: " << path << "\n"
             << "\tprefix: " << prefix << "\n"
             << "\tfreshness-period: " << ndn::chunker::FRESHNESS_PERIOD << "\n"
