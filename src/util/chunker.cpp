@@ -290,9 +290,10 @@ public:
       try {
         bsoncxx::array::view subarray{result->view()["versions"].get_array().value};
         for (const bsoncxx::array::element& sub_ele : subarray) {
-          if ((uint64_t)sub_ele.get_int64().value == m_version && m_verbose) {
-            // this version exists, exit
-            std::cout << "  version [" << m_version << "] exists, skip the file ...\n";
+          if ((uint64_t)sub_ele.get_int64().value == m_version) {
+            if (m_verbose) {
+              std::cout << "  version [" << m_version << "] exists, skip the file ...\n";
+            }
             return 1;
           }
         }
