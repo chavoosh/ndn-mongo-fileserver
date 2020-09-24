@@ -56,8 +56,8 @@ for rendition in "${renditions[@]}"; do
   cmd+=( -minrate ${bitrate}k -maxrate ${bitrate}k -bufsize ${bitrate}k -b:v ${bitrate}k)
   cmd+=( -y ${filename}_h264_${resolution}p.mp4)
 
-  echo -e "Exec command:\n\e[2mFFREPORT=file=$logFile:$logLevel ffmpeg-bar ${cmd[@]} -xerror\e[0m"
-  FFREPORT=file=$logFile:$logLevel ffmpeg-bar "${cmd[@]}" -xerror
+  echo -e "Exec command:\n\e[2mFFREPORT=file=$logFile:$logLevel ffmpeg ${cmd[@]} -xerror\e[0m"
+  FFREPORT=file=$logFile:$logLevel ffmpeg "${cmd[@]}" -xerror
   lc=( $(wc -l $logFile) )
   if [ ${lc[0]} -lt 3 ]; then
     echo -e "\e[32mECode:0 (SUCCESS)\e[39m"
