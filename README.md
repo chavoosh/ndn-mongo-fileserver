@@ -1,5 +1,8 @@
 # NDN Serves Files From MongoDB
 
+[![DOI](https://zenodo.org/badge/212915432.svg)](https://zenodo.org/badge/latestdoi/212915432)
+
+
 NDN-MONGO-FILESERVER tool-bundle is part of [iViSA project](https://ivisa.named-data.net), containing the following tools:
 1. [ndn-mongo-fileserver](src/mongo-fileserver)
 2. [chunker](src/util)
