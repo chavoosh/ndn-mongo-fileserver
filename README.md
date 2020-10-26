@@ -101,3 +101,15 @@ To report any bugs or features use the project's [issue tracker](https://github.
 # License
 ndn-mongo-fileserver is an open source project licensed under the GPL version 3. See [COPYING.md](COPYING.md)
 for more information.
+
+# Citation
+You can cite this project in your publications if it helps your research. Here is an example BibTeX entry:
+
+```
+@misc{chavoosh'18ndn-mongo,
+  title={NDN Serves Files From MongoDB},
+  author={Ghasemi, Chavoosh and others},
+  year={2020},
+  howpublished={\url{https://github.com/chavoosh/ndn-mongo-fileserver}}
+}
+```
