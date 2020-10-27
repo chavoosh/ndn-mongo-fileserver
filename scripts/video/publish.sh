@@ -7,8 +7,8 @@
 # this script e.g., in COPYING.md file. If not, see <http://www.gnu.org/licenses/>.
 #...............................................................
 
-if [ $# -lt 2 ]; then
-  echo -e "\nprogram usage: bash publish.sh <video_file_name> <address_of_main_palylis>\n
+if [ $# -lt 3 ]; then
+  echo -e "\nprogram usage: bash publish.sh <video_file_name> <address_of_main_palylis> <output_directory>\n
            \texample: bash publish.sh ndn_vs_ip /ndn/web/viedo/ndn_vs_ip/hls/playlist.m3u8"
   exit -1
 fi
@@ -17,6 +17,8 @@ echoerr() { echo -e "$@" 1>&2; }
 
 filename=$1
 playlistUrl=$2
+outDirectory=${3%/}
+output=$outDirectory/$filename.html
 
 input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/3a9dc483855485969b71589142eea5d4e0d25786/base.html
 MULTISPACES='      '
@@ -33,6 +35,6 @@ else
   echoerr "\e[32mECode:0 (SUCCESS)\e[39m"
 fi
 
-cat base.html | sed -n '0, /begin url section/p' > $filename.html && printf "${line}" >> $filename.html
-cat base.html | sed -n '/end url section/, $p' >> $filename.html
+cat base.html | sed -n '0, /begin url section/p' > $output && printf "${line}" >> $output
+cat base.html | sed -n '/end url section/, $p' >> $output
 rm base.html

@@ -124,4 +124,4 @@ check_stderr chunking
 rm $stderr
 
 playlistUrl=$base'/'$filename'/'$protocol'/'$playlist
-bash ./publish.sh $filename $playlistUrl
+bash ./publish.sh $filename $playlistUrl .
