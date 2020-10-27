@@ -105,7 +105,7 @@ check_stderr() {
 base='/ndn/web/video'
 ################################################
 # transcoding (adjust the resolution in script)
-bash ./transcoder.sh $1 2> $stderr
+bash ./transcoder.sh $1 . 2> $stderr
 check_stderr encoding
 
 # packager option (adjust the resolution in script)
@@ -121,15 +121,7 @@ segmentSize=8000
 chunker $base/$filename -i $current_dir/$filename -s $segmentSize -e $version 2> $stderr
 check_stderr chunking
 
-# html file options
-manifestUrl=$base'/'$filename'/'$protocol'/'$playlist
-
-# cdnj shaka-player & ndn.min.js
-input=https://gist.githubusercontent.com/chavoosh/f7db8dc41c3e8bb8e6a058b1ea342b5a/raw/3a9dc483855485969b71589142eea5d4e0d25786/base.html
-MULTISPACES='      '
-line="${MULTISPACES}"'<!-- manifest uri -->\n'
-line+="${MULTISPACES}"'<span id="manifestUri" hidden>'$manifestUrl'</span>\n\n'
-
-curl $input | sed -n '0, /begin url section/p' > $filename.html && printf "${line}" >> $filename.html
-curl $input | sed -n '/end url section/, $p' >> $filename.html
 rm $stderr
+
+playlistUrl=$base'/'$filename'/'$protocol'/'$playlist
+bash ./publish.sh $filename $playlistUrl

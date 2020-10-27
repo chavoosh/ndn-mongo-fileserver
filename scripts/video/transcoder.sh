@@ -10,8 +10,8 @@
 error=""
 echoerr() { echo -e "$@" 1>&2; }
 
-if [ $# -lt 1 ]; then
-  echo -e "\nprogram usage: <address of video file>\n
+if [ $# -lt 2 ]; then
+  echo -e "\nprogram usage: <address of video file> <address of output directory>\n
            \tNOTE: adjust output resolutions in the script\n"
   exit -1
 fi
@@ -27,6 +27,7 @@ filename=$(basename -- "$1")
 filename="${filename%.*}"
 logFile=".ffreport.log"
 logLevel="level=16" # error level
+outDirectory=${2%/}
 
 # comment/add lines here to control which renditions would be created
 renditions=(
@@ -54,7 +55,7 @@ for rendition in "${renditions[@]}"; do
   cmd=( -i ${1} -c:a copy -vf "scale=-2:${resolution}" -c:v libx264 -profile:v ${profile} -level:v ${level})
   cmd+=("${x264opt[@]}")
   cmd+=( -minrate ${bitrate}k -maxrate ${bitrate}k -bufsize ${bitrate}k -b:v ${bitrate}k)
-  cmd+=( -y ${filename}_h264_${resolution}p.mp4)
+  cmd+=( -y ${outDirectory}/${filename}_h264_${resolution}p.mp4)
 
   echo -e "Exec command:\n\e[2mFFREPORT=file=$logFile:$logLevel ffmpeg ${cmd[@]} -xerror\e[0m"
   FFREPORT=file=$logFile:$logLevel ffmpeg "${cmd[@]}" -xerror
@@ -65,7 +66,7 @@ for rendition in "${renditions[@]}"; do
     # size of the log file exceeds 3 lines upon an error
     error=$(tail -n 1 $logFile)
     echoerr "\e[31mECode:1 (FAILURE)\n$error\e[39m"
-    rm ${filename}_h264_${resolution}p.mp4
+    rm ${outDirectory}/${filename}_h264_${resolution}p.mp4
     rm $logFile
     break # exit
   fi
