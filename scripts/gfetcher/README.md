@@ -8,7 +8,7 @@ Also, if the name of any previously published video changes in the Google drive 
 The last operation that this tool supports is deleting a video. Upon adding keyword __`_delete_`___ at the beginning of a previously published video this tool will delete it.
 
 ## Prerequisites
-* Install NDN MongoDB Fileserver [prereleases](https://github.com/chavoosh/ndn-mongo-fileserver#prerequisites)
+* Install NDN MongoDB Fileserver [prerequisits](https://github.com/chavoosh/ndn-mongo-fileserver#prerequisites)
 * Install [pip](https://pip.pypa.io/en/stable/installing/#) package management tool
 * Install the Google Client Library. Run the following command:
 
