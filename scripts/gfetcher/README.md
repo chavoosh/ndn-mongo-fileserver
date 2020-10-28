@@ -5,7 +5,7 @@ This script bundle provides an automated way to publish/remove videos in/from [N
 This tool runs on the server side. It frequently checks a specific Google drive folder of a Gmail account and reflects any changes in that folder in the streaming service.
 More specificly, if a new video will be added to the Google drive folder, this tool automatically will encode and publish it in the streaming service.
 Also, if the name of any previously published video changes in the Google drive folder, this tool will accordingly update the name of the video in the service.
-The last operation that this tool supports is deleting a video. Upon deleting a previously published video, this tool will accordingly remove it from the streaming service.
+The last operation that this tool supports is deleting a video. Upon adding keyword __`_delete_`___ at the beginning of a previously published video this tool will delete it.
 
 ## Prerequisites
 * Install NDN MongoDB Fileserver [prereleases](https://github.com/chavoosh/ndn-mongo-fileserver#prerequisites)
