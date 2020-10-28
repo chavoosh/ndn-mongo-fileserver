@@ -27,3 +27,6 @@ Follow __Step 1__ in this [link](https://developers.google.com/drive/api/v3/quic
 6. After inserting, if you want to rename the name of the published video, simply rename the video in the Google drive folder; the tool will update the name of the published video accordingly.
 7. If you need to delete the published video from MongoDB, put keyword __`_delete_`___ at the beginning of the video file name.
 For example, if __sample-video.mp4__ is published and you want to delete it, just rename it from `sample-video.mp4` to `_delete_sample-video.mp4`.
+
+## Note
+This tools keeps all its log files and necessary resources under __`/var/log/gFetcher`__ directory.
