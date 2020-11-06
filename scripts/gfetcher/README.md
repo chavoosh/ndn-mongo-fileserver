@@ -1,5 +1,8 @@
 # gFetcher
 
+<img src="logo.png" title="gFetcher logo" width="200">
+
+
 This script bundle provides an automated way to publish/remove videos in/from [NDN video streaming service (iViSA)](https://ivisa.named-data.net).
 
 This tool runs on the server side. It frequently checks a specific Google drive folder of a Gmail account and reflects any changes in that folder in the streaming service.
