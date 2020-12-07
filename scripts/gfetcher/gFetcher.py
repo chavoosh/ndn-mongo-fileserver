@@ -36,7 +36,7 @@ def parseInputArguments():
         help_message()
         sys.exit(2)
     try:
-        opts, args = getopt.getopt(sys.argv[2:], "I:R", ['cleanup', 'wipeout'])
+        opts, args = getopt.getopt(sys.argv[2:], "I:RhH", ['cleanup', 'wipeout', 'help'])
     except getopt.GetoptError:
         help_message()
         sys.exit(2)
@@ -47,6 +47,9 @@ def parseInputArguments():
     global HTML_DIRECTORY
     global scanning_interval
     for opt, arg in opts:
+        if opt == '-h' or opt == '-H' or opt == '--help':
+            help_message()
+            sys.exit(1)
         if opt == '-I':
             if not isInteger(arg):
                 errorMessage(arg + " must be an integer...\n")
@@ -54,7 +57,6 @@ def parseInputArguments():
                 sys.exit(3)
             scanning_interval = int(arg)
         if opt == '-R':
-            # [TODO] rollback failed video files
             removeFailedRecordsFromCompleteFile()
         if opt == '--cleanup':
             cleanupVideoLogFiles()

@@ -89,8 +89,6 @@ class VideoFile:
         if finalStatus.getStage() == "delete":
             eRecord = self.__getExistingRecord()
             self.statusRecord.setOrKeepName(eRecord.getName()) # use existing video name
-        #if finalStatus.getStage() != "init":
-        #    self.statusRecord.writeToCompleteFile()
         self.statusRecord.writeToCompleteFile()
         self.__isCompleted = True
 

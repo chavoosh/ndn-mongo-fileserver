@@ -138,7 +138,7 @@ class VideoStatus:
         stringedStatus = stringedStatus.rstrip()
         fields = stringedStatus.split("-")
         # [TODO] Risky design. If the structure of video status
-        # in status file changes, this function will completely malfunction.
+        # in status file changes, this function will malfunction.
         return {"state": fields[0],
                 "stage": fields[1],
                 "step": fields[2]}

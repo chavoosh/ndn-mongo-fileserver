@@ -177,7 +177,7 @@ class VideoStatusRecord:
         stringedRecord = stringedRecord.rstrip()
         fields = stringedRecord.split("\t")
         # [TODO] Risky design. If the structure of records in
-        # status file changes, this function will completely malfunction.
+        # status file changes, this function will malfunction.
         return {"timestamp": fields[0],
                 "fileId": fields[1],
                 "name": fields[2],
