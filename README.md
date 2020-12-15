@@ -12,9 +12,9 @@ NDN-MONGO-FILESERVER tool-bundle is part of [iViSA project](https://ivisa.named-
 Take the following steps to install this tool-bundle.
 
 ### Prerequisites
-Install the mentioned version of the following packages:
-- [ndn-cxx](https://github.com/named-data/ndn-cxx) (release `0.6.6`)
-- [NFD](https://github.com/named-data/NFD) (release `0.6.6`)
+Install the latest versions of the following packages (to checkout to a specific release use `$ git checkout <release-name>`):
+- [ndn-cxx](https://github.com/named-data/ndn-cxx)
+- [NFD](https://github.com/named-data/NFD)
 - [MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu)
 - [Mongo Driver](http://mongocxx.org/mongocxx-v3/installation/)
 
